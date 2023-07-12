@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import Center from "./Center";
-import CartIcon from "./icons/CartIcon";
-import Button from "./Button";
 import ButtonLink from "./ButtonLink";
-import { useContext } from "react";
+import { useContext} from "react";
 import { CartContext } from "./CartContext";
+import FlyingButton from 'react-flying-item';
+import CartIcon from "./icons/CartIcon";
+import { ButtonStyle } from "./Button";
 
 // aplico esilos como CSS tradicional pero , en cada componente particular. 
 
@@ -38,6 +39,7 @@ const ColumnsWrapper = styled.div`
   div:nth-child(1) {
     order: 2;
   }
+  /* para mayores de 768, usamos min-width */
   @media screen and (min-width:768px) {
     grid-template-columns: 1.1fr 0.9fr;
     div:nth-child(1) {
@@ -56,8 +58,23 @@ const Column = styled.div`
 // en este caso, este es el contenedor de los botones, es un div
 const ButtonsWrapper = styled.div`
   display: flex;
+  justify-content: start;
   gap:10px;
   margin-top:25px;
+
+@media screen and (max-width:768px) {
+  justify-content: center;
+}
+
+`;
+
+const ButtonCartFeatured = styled.div`
+  button{
+    ${ButtonStyle}
+  background: #fff;
+  color: #000;
+  border:"none";
+}
 `;
 
 export default function Featured({ product }) {
@@ -67,19 +84,33 @@ export default function Featured({ product }) {
 
   function addFeaturedToCart() {
     addProductToCart(product._id)
-  }
+  };
+
+
   return (
     <Bg>
       <Center>
-        <ColumnsWrapper>
+        <ColumnsWrapper data-aos="fade-up">
           <Column>
             <div>
               <Title>{product.title}</Title>
               <Desc>{product.description}</Desc>
               <ButtonsWrapper>
-                <Button $primary onClick={addFeaturedToCart}>
-                  <CartIcon />Add to cart
-                </Button>
+                <ButtonCartFeatured onClick={addFeaturedToCart}>
+                  <FlyingButton
+                    src={product.images?.[0]}
+                    targetTop={'5%'}
+                    targetLeft={'75%'} F
+                    flyingItemStyling={{
+                      width: 'auto',
+                      height: 'auto',
+                      maxWidth: '60px',
+                      maxHeight: '60px'
+                    }}>
+                    <CartIcon />
+                    Add to cart
+                  </FlyingButton>
+                </ButtonCartFeatured>
                 <ButtonLink $outline href={'/products/' + product._id}>Read More</ButtonLink>
               </ButtonsWrapper>
             </div>

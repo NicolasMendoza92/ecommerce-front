@@ -7,6 +7,8 @@ import { styled } from "styled-components";
 import axios from "axios";
 import Table from "@/components/Table";
 import Input from "@/components/Input";
+import Trash from "@/components/icons/Trash";
+import { useSession } from "next-auth/react";
 
 
 const ColumnsWrapper = styled.div`
@@ -24,6 +26,12 @@ const Box = styled.div`
   border-radius: 10px;
   padding: 30px;
 `;
+
+const HeaderTableCart = styled.div`
+display: flex;
+align-items: center;
+justify-content: space-between;
+`
 
 const ProductInfoCell = styled.td`
   padding: 10px 0;
@@ -70,7 +78,8 @@ const CityHolder = styled.div`
 
 export default function CartPage() {
 
-  const { cartProducts, addProductToCart, removeProductToCart, clearCart } = useContext(CartContext);
+  const { data: session } = useSession();
+  const { cartProducts, addProductToCart, removeProductToCart, clearCart, setCartProducts } = useContext(CartContext);
 
   const [products, setProducts] = useState([]);
   // capturamos todos los input del payform, y los gestionamos como states.
@@ -104,6 +113,12 @@ export default function CartPage() {
       setIsSuccess(true);
       clearCart();
     }
+    axios.get('/api/address').then(response => {
+      setCity(response.data.city);
+      setPostalCode(response.data.postalCode);
+      setStreetAddress(response.data.streetAddress);
+      setCountry(response.data.country);
+    })
   }, []);
 
   // botonera del carrito.
@@ -112,6 +127,11 @@ export default function CartPage() {
   }
   function lessOfThisProduct(id) {
     removeProductToCart(id);
+  }
+
+  function emptyCart() {
+    setCartProducts([]);
+    clearCart();
   }
 
 
@@ -127,8 +147,14 @@ export default function CartPage() {
 
   async function goToPayment() {
     const response = await axios.post('/api/checkout', {
-      name, email, city, postalCode, streetAddress, country,
-      cartProducts, total
+      name:session?.user?.name, 
+      email:session?.user?.email, 
+      city, 
+      postalCode, 
+      streetAddress, 
+      country,
+      cartProducts, 
+      total
     });
     // si me responde con la direccion, voy directamente a esa pantalla de pago de stripe para ejecutar el pago.
     if (response.data.url) {
@@ -150,7 +176,7 @@ export default function CartPage() {
           </ColumnsWrapper>
         </Center>
       </>
-    ); 
+    );
   }
 
   return (
@@ -159,7 +185,12 @@ export default function CartPage() {
       <Center>
         <ColumnsWrapper>
           <Box>
-            <h1>Cart</h1>
+            <HeaderTableCart>
+              <h1>Cart</h1>
+              <Button $trash onClick={() => emptyCart()} >
+                <Trash />
+              </Button>
+            </HeaderTableCart>
             {!cartProducts?.length && (
               <div>Your cart is empty</div>
             )}
@@ -213,12 +244,12 @@ export default function CartPage() {
 
               <Input type="text"
                 placeholder="Name"
-                value={name}
+                value={session?.user?.name}
                 name="name"
                 onChange={ev => setName(ev.target.value)} />
               <Input type="email"
                 placeholder="Email"
-                value={email}
+                value={session?.user?.email}
                 name="email"
                 onChange={ev => setEmail(ev.target.value)} />
               <CityHolder>

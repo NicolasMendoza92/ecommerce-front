@@ -1,16 +1,17 @@
-import Button from "@/components/Button";
+import Button, { ButtonStyle } from "@/components/Button";
 import { CartContext } from "@/components/CartContext";
 import Center from "@/components/Center";
 import Header from "@/components/Header";
 import ProductImages from "@/components/ProductImages";
 import Title from "@/components/Title";
 import WhiteBox from "@/components/WhiteBox";
-import CartIcon from "@/components/icons/CartIcon";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import styled from "styled-components";
+import FlyingButton from 'react-flying-item';
+import CartIcon from "@/components/icons/CartIcon";
 
 
 const ColWrapper = styled.div`
@@ -31,6 +32,15 @@ const Price = styled.span`
   font-size: 1.4rem;
 `;
 
+const ButtonCartWrapper = styled.div`
+  button{
+    ${ButtonStyle}
+  background-color: #0D3D29;
+    border: 1px solid #0D3D29;
+    color:#fff;
+}
+`
+
 export default function ProductPage({ product }) {
 
     const router = useRouter();
@@ -39,8 +49,8 @@ export default function ProductPage({ product }) {
         await router.push('/products');
     }
 
-    const { addProductToCart} = useContext(CartContext);
-    
+    const { addProductToCart } = useContext(CartContext);
+
     return (
         <>
             <Header />
@@ -56,11 +66,21 @@ export default function ProductPage({ product }) {
                             <div>
                                 <Price>${product.price}</Price>
                             </div>
-                            <div>
-                                <Button $addProduct onClick={() => addProductToCart(product._id)}>
-                                    <CartIcon />Add to cart
-                                </Button>
-                            </div>
+                            <ButtonCartWrapper onClick={() => addProductToCart(product._id)}>
+                                <FlyingButton
+                                    src={product.images?.[0]}
+                                    targetTop={'5%'}
+                                    targetLeft={'75%'}
+                                    flyingItemStyling={{
+                                        width: 'auto',
+                                        height: 'auto',
+                                        maxWidth: '60px',
+                                        maxHeight: '60px'
+                                    }}>
+                                    <CartIcon />
+                                    Add to cart
+                                </FlyingButton>
+                            </ButtonCartWrapper>
                             <div>
                                 <Button $primary onClick={goBack}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

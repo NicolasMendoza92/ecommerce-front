@@ -1,19 +1,13 @@
-import { styled } from "styled-components";
+
 import ProductsGrid from "./ProductsGrid";
-import Content from "./Content";
-
-
-const Title = styled.h2`
-  font-size: 2rem;
-  margin:30px 0 20px;
-  font-weight: normal;
-`;
+import Center from "./Center";
+import Title from "./Title";
 
 export default function NewProducts({ newProducts }) {
   return (
-    <Content>
+    <Center>
       <Title>New Arrivals</Title>
       <ProductsGrid newProducts={newProducts} />
-    </Content>
+    </Center>
   )
 }

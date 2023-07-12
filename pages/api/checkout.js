@@ -23,6 +23,9 @@ export default async function handler(req, res) {
     for (const productId of uniqueIds) {
         const productInfo = productsInfos.find(prod => prod._id.toString() === productId);
         const quantity = productsIds.filter(id => id === productId)?.length;
+        // tratando que se muestre la imagen
+        const image = productInfo.images.slice(0,1).shift();
+        console.log(image)
         // si la cantidad del carrito es mayor a cero y tenemos info de producto entonces
         if (quantity > 0 && productInfo) {
             line_items.push({
@@ -30,7 +33,7 @@ export default async function handler(req, res) {
                 price_data: {
                     currency: 'USD',
                     product_data: { name: productInfo.title },
-                    unit_amount: productInfo.price * 100,
+                    unit_amount: productInfo.price *100,
                 },
             });
         }
@@ -39,7 +42,7 @@ export default async function handler(req, res) {
     // esto se hace, independientemente de que el pago se haya hecho o no, es una orden.
     // creo una order con los siguientes parametros, que son los de mi Models->Order.js, para luego enviarla a mi base de datos de mongoose. 
     const orderDoc = await Order.create({
-        line_items, name,email, city, postalCode, streetAddress, country, paid: false, total,
+        line_items, name,email, city, postalCode, streetAddress, country, paid:false, total,
     });
 
 
@@ -48,6 +51,7 @@ export default async function handler(req, res) {
         line_items,
         mode: 'payment',
         customer_email: email,
+        // la public url puede cambiar dependiendo donde inicie el proyecto , si lo subo a vercel la cambio 
         success_url: process.env.PUBLIC_URL + '/cart?success=1',
         cancel_url: process.env.PUBLIC_URL + '/cart?canceled=1',
         metadata: { orderId: orderDoc._id.toString(), test: 'ok' }

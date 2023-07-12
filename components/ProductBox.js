@@ -1,12 +1,8 @@
 import Link from "next/link";
 import { styled } from "styled-components";
-import Button from "./Button";
-import CartIcon from "./icons/CartIcon";
-import { useContext } from "react";
-import { CartContext } from "./CartContext";
+import FlyingButton from "./ButtonCartWrapper";
 
-
-const WhiteBox = styled(Link)`
+const WhiteLinkBox = styled(Link)`
   background-color: #fff;
   padding: 20px;
   height: 130px;
@@ -19,6 +15,7 @@ const WhiteBox = styled(Link)`
     max-width: 100%;
     max-height: 100px;
   }
+
 `;
 
 const Title = styled(Link)`
@@ -55,30 +52,27 @@ const Price = styled.div`
   }
 `;
 
+
 export default function ProductBox({ _id, title, price, images }) {
 
-  const { addProductToCart } = useContext(CartContext)
   const url = '/product/' + _id;
 
   return (
     <div>
-      <WhiteBox href={url}>
+      <WhiteLinkBox href={url}>
         <div>
           <img src={images?.[0]} alt="" />
         </div>
-      </WhiteBox>
+      </WhiteLinkBox>
       <ProductInfoBox>
         <Title href={url}>{title}</Title>
         <PriceRow>
           <Price>
             ${price}
           </Price>
-          <Button onClick={() => addProductToCart(_id)} $cartbtn>
-            <CartIcon />
-            Add to cart
-          </Button>
+          <FlyingButton _id={_id} src={images?.[0]}> Add to cart</FlyingButton>
         </PriceRow>
       </ProductInfoBox>
-    </div>
+    </div >
   )
 }

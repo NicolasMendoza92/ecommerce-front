@@ -4,7 +4,7 @@ const stripe = require('stripe')(process.env.STRIPE_SK);
 // con este importe, podemos hacer un request a la plataforma de stripe
 import { buffer } from "micro";
 
-// previamnte, debemos instalar el CLI de stripe en nuestro window y correrlo con el cdm comand line. Seguir los pasos de la pagina. 
+// previamnte, debemos instalar el CLI de stripe en nuestro window y correrlo con el cdm comand line. Seguir los pasos de la pagina.
 // This is your Stripe CLI webhook secret for testing your endpoint locally.
 const endpointSecret = process.env.END_POINT_SECRET_STRIPE
 
@@ -28,6 +28,7 @@ export default async function handler(req,res) {
   // hay elementos de stripe  que no estamos manejando payment_intent.succeeded , payment_intent.created o charge.succeeded. Esto es mas informacion que podemos traer. 
   switch (event.type) {
     case 'checkout.session.completed':
+      console.log(data)
       const data = event.data.object;
       const orderId = data.metadata.orderId;
       const paid = data.payment_status === 'paid';

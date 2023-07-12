@@ -1,5 +1,4 @@
-
-import Content from "@/components/Content";
+import Center from "@/components/Center";
 import Header from "@/components/Header";
 import ProductsGrid from "@/components/ProductsGrid";
 import Title from "@/components/Title";
@@ -17,15 +16,14 @@ export async function getServerSideProps() {
     };
   }
 
-
 export default function ProductsPage({products}) {
   return (
     <>
       <Header />
-      <Content>
+      <Center>
       <Title>All products</Title>
         <ProductsGrid products={products} />
-      </Content>
+      </Center>
     </>
   );
 }

@@ -20,7 +20,7 @@ export default function Home({featuredProduct, newProducts}) {
 // usamos la consulta a nuestra API, traemos la info
 export async function getServerSideProps() {
 
-  const featuredProductId = '647ccd38994eeed0136e20a9';
+  const featuredProductId = '64a43b83744740395505aac8';
   await mongooseConnect();
   const featuredProduct = await Product.findById(featuredProductId);
   const newProducts = await Product.find({}, null, {sort: {'_id':-1}, limit:5});

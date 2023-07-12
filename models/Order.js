@@ -10,7 +10,8 @@ const OrderSchema = new Schema({
     country:String,
     paid:Boolean,
     total:String,
-  }, {
+  }, 
+  {
     timestamps: true,
   }
   );
