@@ -10,6 +10,10 @@ const ButtonCartWrapper = styled.div`
   background-color: #0D3D29;
     border: 1px solid #0D3D29;
     color:#fff;
+    padding: 5px 5px;
+    svg{
+      width:25px;
+    }
 }
 `;
 

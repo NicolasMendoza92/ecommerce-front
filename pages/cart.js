@@ -89,9 +89,9 @@ export default function CartPage() {
   const [postalCode, setPostalCode] = useState('');
   const [streetAddress, setStreetAddress] = useState('');
   const [country, setCountry] = useState('');
+  const [shippingFee, setShippingFee] = useState('');
 
   const [isSuccess, setIsSuccess] = useState(false);
-
 
   useEffect(() => {
     if (cartProducts.length > 0) {
@@ -113,20 +113,34 @@ export default function CartPage() {
       setIsSuccess(true);
       clearCart();
     }
+    axios.get('/api/settings?name=shippingFee').then(res => {
+      setShippingFee(res.data.value)
+    })
+  }, []);
+
+  useEffect(() => {
+    if (!session) {
+      return;
+    }
     axios.get('/api/address').then(response => {
       setCity(response.data.city);
       setPostalCode(response.data.postalCode);
       setStreetAddress(response.data.streetAddress);
       setCountry(response.data.country);
-    })
-  }, []);
+    });
+  }, [session])
 
   // botonera del carrito.
   function moreOfThisProduct(id) {
     addProductToCart(id);
   }
   function lessOfThisProduct(id) {
-    removeProductToCart(id);
+    if(cartProducts.length === 1){
+      emptyCart();
+    } else{
+      removeProductToCart(id);
+    }
+    
   }
 
   function emptyCart() {
@@ -137,24 +151,26 @@ export default function CartPage() {
 
 
   // funcion para sumar totales
-  let total = 0;
+  let subTotal = 0;
   for (const productId of cartProducts) {
     const price = products.find(prod => prod._id === productId)?.price || 0;
-    total += price;
+    subTotal += price;
   }
+
+  let total = subTotal + parseInt(shippingFee || 0)
 
   // vamos a nuestra api de checkout
 
   async function goToPayment() {
     const response = await axios.post('/api/checkout', {
-      name:session?.user?.name, 
-      email:session?.user?.email, 
-      city, 
-      postalCode, 
-      streetAddress, 
+      name: session?.user?.name,
+      email: session?.user?.email,
+      city,
+      postalCode,
+      streetAddress,
       country,
-      cartProducts, 
-      total
+      cartProducts,
+      total,
     });
     // si me responde con la direccion, voy directamente a esa pantalla de pago de stripe para ejecutar el pago.
     if (response.data.url) {
@@ -228,9 +244,16 @@ export default function CartPage() {
                     </tr>
                   ))}
                   <tr>
-                    <td>Total amount:</td>
-                    <td></td>
-                    <td>${total}</td>
+                    <td colSpan={2}>Sub Total:</td>
+                    <td>${subTotal}</td>
+                  </tr>
+                  <tr>
+                    <td colSpan={2}>Shipping:</td>
+                    <td>${shippingFee}</td>
+                  </tr>
+                  <tr>
+                    <td colSpan={2}><b>Total Amount:</b></td>
+                    <td><b>${total}</b></td>
                   </tr>
                 </tbody>
               </Table>
@@ -244,12 +267,12 @@ export default function CartPage() {
 
               <Input type="text"
                 placeholder="Name"
-                value={session?.user?.name}
+                value={session?.user.name}
                 name="name"
                 onChange={ev => setName(ev.target.value)} />
               <Input type="email"
                 placeholder="Email"
-                value={session?.user?.email}
+                value={session?.user.email}
                 name="email"
                 onChange={ev => setEmail(ev.target.value)} />
               <CityHolder>
@@ -274,7 +297,6 @@ export default function CartPage() {
                 value={country}
                 name="country"
                 onChange={ev => setCountry(ev.target.value)} />
-              <input type="hidden" value={total} name="total" />
               <Button $payment onClick={goToPayment} >
                 Continue to payment
               </Button>

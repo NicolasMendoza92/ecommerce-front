@@ -1,6 +1,9 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { Order } from "@/models/Order";
 import { Product } from "@/models/Product";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./auth/[...nextauth]";
+import { Setting } from "@/models/Setting";
 const stripe = require('stripe')(process.env.STRIPE_SK);
 
 
@@ -39,26 +42,40 @@ export default async function handler(req, res) {
         }
 
     }
+
+    const session = await getServerSession(req,res,authOptions);
+
     // esto se hace, independientemente de que el pago se haya hecho o no, es una orden.
     // creo una order con los siguientes parametros, que son los de mi Models->Order.js, para luego enviarla a mi base de datos de mongoose. 
     const orderDoc = await Order.create({
-        line_items, name,email, city, postalCode, streetAddress, country, paid:false, total,
+        line_items, name,email, city, postalCode, streetAddress, country, paid:false, total, userEmail:session?.user?.email,
     });
 
+    const shippingFeeSetings = await Setting.findOne({name:'shippingFee'});
+    const  shippingFeeOk = parseInt(shippingFeeSetings.value || '0')*100;
 
     // esto es lo que necesita Stripe para la sesion. 
-    const session = await stripe.checkout.sessions.create({
+    const stripeSession = await stripe.checkout.sessions.create({
         line_items,
         mode: 'payment',
         customer_email: email,
         // la public url puede cambiar dependiendo donde inicie el proyecto , si lo subo a vercel la cambio 
         success_url: process.env.PUBLIC_URL + '/cart?success=1',
         cancel_url: process.env.PUBLIC_URL + '/cart?canceled=1',
-        metadata: { orderId: orderDoc._id.toString(), test: 'ok' }
+        metadata: { orderId: orderDoc._id.toString(), test: 'ok' }, 
+        shipping_options: [
+            {
+                shipping_rate_data:{
+                    display_name:'shipping fee', 
+                    type:'fixed_amount',
+                    fixed_amount:{amount:shippingFeeOk, currency:'USD'} 
+                }
+            }
+        ]
     });
 
     // esta es la direccion que me abre la pantalla de pago de stripe. 
-    res.json({ url:session.url, })
+    res.json({ url:stripeSession.url, })
 
 }
 

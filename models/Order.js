@@ -1,19 +1,20 @@
-const {model,models, Schema } = require("mongoose");
+const { model, models, Schema } = require("mongoose");
 
 const OrderSchema = new Schema({
-    line_items:Object,
-    name:String,
-    email:String,
-    city:String,
-    postalCode:String,
-    streetAddress:String,
-    country:String,
-    paid:Boolean,
-    total:String,
-  }, 
+  userEmail: String,
+  line_items: Object,
+  name: String,
+  email: String,
+  city: String,
+  postalCode: String,
+  streetAddress: String,
+  country: String,
+  paid: Boolean,
+  total: String,
+},
   {
     timestamps: true,
   }
-  );
-  
-  export const Order = models?.Order || model('Order', OrderSchema);
+);
+
+export const Order = models?.Order || model('Order', OrderSchema);

@@ -36,7 +36,8 @@ export default function CartContextProvider({ children }) {
       const position = prev.indexOf(productId);
       if (position !== -1) {
         return prev.filter((value, index) => index !== position);
-      }
+      };
+
       return prev;
     });
   }

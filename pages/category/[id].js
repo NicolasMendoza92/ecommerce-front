@@ -5,9 +5,12 @@ import Spinner from "@/components/Spinner";
 import WhiteBox from "@/components/WhiteBox";
 import { Category } from "@/models/Category";
 import { Product } from "@/models/Product";
+import { WishedProduct } from "@/models/WishedProduct";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
+import { authOptions } from "../api/auth/[...nextauth]";
+import { getServerSession } from "next-auth";
 
 const CategoryHeader = styled.div`
 display: flex;
@@ -65,7 +68,7 @@ select{
   }
 `
 // reenombramos producto como los iniciales, para ponerlo como estado inicial del useState
-export default function CategoryPage({ category, subCategories, products: noFilterApplied }) {
+export default function CategoryPage({ category, subCategories, products: noFilterApplied, wishedProducts = [] }) {
     const [products, setProducts] = useState(noFilterApplied);
     // seteamos el estado sin filtros aplicados "value = all"
     const initialFilterState = category.properties.map(prop => ({ name: prop.name, value: 'all' }));
@@ -133,6 +136,7 @@ export default function CategoryPage({ category, subCategories, products: noFilt
                         <Sort>
                             <span>Price:</span>
                             <select value={sort} onChange={e => setSort(e.target.value)}>
+                                <option value="all">All</option>
                                 <option value="price_asc">Lowest first</option>
                                 <option value="price_desc">Highest first</option>
                             </select>
@@ -145,7 +149,7 @@ export default function CategoryPage({ category, subCategories, products: noFilt
                 {!loading && (
                     <div>
                         {products.length > 0 && (
-                            <ProductsGrid products={products} />
+                            <ProductsGrid products={products} wishedProducts={wishedProducts} />
                         )}
                         {products.length === 0 && (
                             <WhiteBox>
@@ -160,6 +164,7 @@ export default function CategoryPage({ category, subCategories, products: noFilt
 }
 
 export async function getServerSideProps(context) {
+    const allShownProductsId = [];
     // traemos la categoria principal, en este caso "mobiles" es la que tiene las propiedes-
     const category = await Category.findById(context.query.id);
     // traemos las categorias que pertenezcan a la categoria seleccionada "mobiles" - hago console log y podremos ver que el parent es Id de categoria main mobile 
@@ -168,11 +173,24 @@ export async function getServerSideProps(context) {
     const catIds = [category._id, ...subCategories.map(c => c._id)];
     // buscamos entre los productos los que tengan category = catIds, ya sea igual a la mainCategory "mobile" o a una parentezca como "iphone, motorola etc"
     const products = await Product.find({ category: catIds });
+    // le enviamos los ID de los productos al array vacio 
+    allShownProductsId.push(...products.map(p => p._id.toString()));
+
+    // traemos datos del usuario logeado para guardar los fav 
+    const session = await getServerSession(context.req, context.res, authOptions);
+    const wishedProducts = session?.user?
+     await WishedProduct.find({
+        userEmail: session.user.email,
+        product: allShownProductsId,
+    })
+    :[];
+
     return {
         props: {
             category: JSON.parse(JSON.stringify(category)),
             products: JSON.parse(JSON.stringify(products)),
             subCategories: JSON.parse(JSON.stringify(subCategories)),
+            wishedProducts: wishedProducts.map(wish => wish.product.toString()),
         }
     };
 };

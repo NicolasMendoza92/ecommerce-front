@@ -17,13 +17,14 @@ export const ButtonStyle = css`
   }
 
   ${props => props.$primary && css`
-  background: #fff;
-  color: #000;
-  width: 100%;
+  background-color: grey;
+  color: #fff;
   border:"none";
+  width: 100%;
+  margin:10px;
 `}
  ${props => props.$outline && css`
-  background: "none";
+  background-color: "none";
   color: #fff;
   border:1px solid #fff;
 `}
@@ -61,18 +62,32 @@ export const ButtonStyle = css`
   width: 100%;
   border:"none";
 `}
- ${props => props.$loginout && css`
-  background-color: blueviolet;
+ ${props => props.$loginoutG && css`
+  background-color: #4285F4;
   color:#fff;
   border:"none";
   width: 100%;
+`}
+ ${props => props.$loginout && css`
+  background-color: black;
+  color:#fff;
+  border:"none";
+  width: 100%;
+  margin-top: 5px;
 `}
  ${props => props.$trash && css`
  svg{
     height: 20px;
   }
 `}
-
+ ${props => props.$seeMore && css`
+    background-color: #F0F3F3;
+    padding:0.2rem;
+    color:#000;
+    svg{
+      height: 20px;
+    }
+  `}
 `;
 
 const StyledButton = styled.button`

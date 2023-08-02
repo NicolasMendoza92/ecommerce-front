@@ -116,7 +116,7 @@ export default function Featured({ product }) {
             </div>
           </Column>
           <Column>
-            <img src="https://res.cloudinary.com/dbv6dgwez/image/upload/v1686242076/pngimg.com_-_iphone_14_PNG19_shzkzj.png" alt="" />
+            <img src={product.images?.[0]} alt="" />
           </Column>
         </ColumnsWrapper>
       </Center>

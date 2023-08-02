@@ -12,6 +12,7 @@ import { useContext } from "react";
 import styled from "styled-components";
 import FlyingButton from 'react-flying-item';
 import CartIcon from "@/components/icons/CartIcon";
+import ProductReviews from "@/components/ProductReviews";
 
 
 const ColWrapper = styled.div`
@@ -91,6 +92,7 @@ export default function ProductPage({ product }) {
                         </PriceRow>
                     </div>
                 </ColWrapper>
+                <ProductReviews product={product}/>
             </Center>
         </>
     );
