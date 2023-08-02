@@ -37,7 +37,7 @@ export default function LoginPage() {
                     <Button $payment >Login</Button>
                 </form>
                 <RegisterWrapper>
-                    Don't have an account yet? <Link href={'/register'}>Sing up</Link>
+                    Don&apos;t have an account yet? <Link href={'/register'}>Sing up</Link>
                 </RegisterWrapper>
             </WhiteBox>
         </LoginBoxWrapper>
