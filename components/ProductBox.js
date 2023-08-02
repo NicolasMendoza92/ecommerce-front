@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { styled } from "styled-components";
-import FlyingButton from "./ButtonCartWrapper";
 import HeartOutlineIcon from "./icons/HeartOutlineIcon";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import HeartSolidIcon from "./icons/HeartSolidIcon";
 import axios from "axios";
+import { CartContext } from "./CartContext";
+import Button from "./Button";
 
 const WhiteLinkBox = styled(Link)`
   background-color: #fff;
@@ -80,6 +81,8 @@ svg{
 
 export default function ProductBox({ _id, title, price, images, wishedProducts}) {
 
+  const { addProductToCart } = useContext(CartContext);
+
   const url = '/product/' + _id;
   const [isWished, setIsWished] = useState(wishedProducts);
 
@@ -110,7 +113,7 @@ export default function ProductBox({ _id, title, price, images, wishedProducts})
           <Price>
             ${price}
           </Price>
-          <FlyingButton _id={_id} src={images?.[0]}> Add to cart</FlyingButton>
+          <Button $cartbtn onClick={() => addProductToCart(_id)}> Add to cart</Button>
         </PriceRow>
       </ProductInfoBox>
     </div >

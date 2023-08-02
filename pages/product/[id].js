@@ -10,7 +10,6 @@ import { Product } from "@/models/Product";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import styled from "styled-components";
-import FlyingButton from 'react-flying-item';
 import CartIcon from "@/components/icons/CartIcon";
 import ProductReviews from "@/components/ProductReviews";
 
@@ -68,19 +67,10 @@ export default function ProductPage({ product }) {
                                 <Price>${product.price}</Price>
                             </div>
                             <ButtonCartWrapper onClick={() => addProductToCart(product._id)}>
-                                <FlyingButton
-                                    src={product.images?.[0]}
-                                    targetTop={'5%'}
-                                    targetLeft={'75%'}
-                                    flyingItemStyling={{
-                                        width: 'auto',
-                                        height: 'auto',
-                                        maxWidth: '60px',
-                                        maxHeight: '60px'
-                                    }}>
+                                <Button $cartbtn >
                                     <CartIcon />
                                     Add to cart
-                                </FlyingButton>
+                                </Button>
                             </ButtonCartWrapper>
                             <div>
                                 <Button $primary onClick={goBack}>

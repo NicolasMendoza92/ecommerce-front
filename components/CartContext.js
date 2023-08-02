@@ -26,7 +26,8 @@ export default function CartContextProvider({ children }) {
 
   //   funcion para agregar productos por el id al carrito
   function addProductToCart(productId) {
-    setCartProducts(prev => [...prev, productId])
+    setCartProducts(prev => [...prev, productId]);
+    alert('product added to cart');
   }
 
   // funcion para sacar producto del carrito , sacamos del array con indexOf

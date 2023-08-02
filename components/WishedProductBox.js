@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { styled } from "styled-components";
-import FlyingButton from "./ButtonCartWrapper";
 import HeartOutlineIcon from "./icons/HeartOutlineIcon";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import HeartSolidIcon from "./icons/HeartSolidIcon";
 import axios from "axios";
 import CartIcon from "./icons/CartIcon";
+import Button from "./Button";
+import { CartContext } from "./CartContext";
 
 const WishedProductWrapper = styled.div`
 display: flex;
@@ -86,6 +87,7 @@ svg{
 
 export default function WishedProductBox({ _id, title, price, images, onRemoveFromWishList=()=>{}}) {
 
+  const { addProductToCart } = useContext(CartContext);
   const url = '/product/' + _id;
   const [isWished, setIsWished] = useState(true);
 
@@ -114,7 +116,7 @@ export default function WishedProductBox({ _id, title, price, images, onRemoveFr
             ${price}
           </Price>
         </InfoRow>
-        <FlyingButton _id={_id} src={images?.[0]}> <CartIcon /></FlyingButton>
+        <Button $cartbtn onClick={() => addProductToCart(_id)} > <CartIcon /></Button>
         <WishListBtn $wished={isWished} onClick={addToWishList}>
           {isWished ? <HeartSolidIcon /> : <HeartOutlineIcon />}
         </WishListBtn>

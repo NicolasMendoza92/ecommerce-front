@@ -3,9 +3,8 @@ import Center from "./Center";
 import ButtonLink from "./ButtonLink";
 import { useContext} from "react";
 import { CartContext } from "./CartContext";
-import FlyingButton from 'react-flying-item';
 import CartIcon from "./icons/CartIcon";
-import { ButtonStyle } from "./Button";
+import Button, { ButtonStyle } from "./Button";
 
 // aplico esilos como CSS tradicional pero , en cada componente particular. 
 
@@ -96,20 +95,11 @@ export default function Featured({ product }) {
               <Title>{product.title}</Title>
               <Desc>{product.description}</Desc>
               <ButtonsWrapper>
-                <ButtonCartFeatured onClick={addFeaturedToCart}>
-                  <FlyingButton
-                    src={product.images?.[0]}
-                    targetTop={'5%'}
-                    targetLeft={'75%'} F
-                    flyingItemStyling={{
-                      width: 'auto',
-                      height: 'auto',
-                      maxWidth: '60px',
-                      maxHeight: '60px'
-                    }}>
+                <ButtonCartFeatured >
+                  <Button onClick={addFeaturedToCart} $cartbtn>
                     <CartIcon />
                     Add to cart
-                  </FlyingButton>
+                  </Button>
                 </ButtonCartFeatured>
                 <ButtonLink $outline href={'/products/' + product._id}>Read More</ButtonLink>
               </ButtonsWrapper>
