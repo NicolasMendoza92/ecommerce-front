@@ -90,7 +90,7 @@ export default function AccountPage() {
             setOrders(response.data);
             setLoadingOrders(true);
         })
-    }, []);
+    }, [session]);
 
     // funcion que saca el favorito de la lista de favs
     function productRemovedFromWishList(idToRemove) {

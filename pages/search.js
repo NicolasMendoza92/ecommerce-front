@@ -37,7 +37,7 @@ export default function SearchPage({ products, wishedProducts }) {
             });
             setProdFinded(searchedProducts);
         }
-    }, [prodSearched])
+    }, [prodSearched,products])
 
     return (
         <>

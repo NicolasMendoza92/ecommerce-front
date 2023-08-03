@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
+import Swal from 'sweetalert2'
 
 // manera de usar stateProvider en react, se usa createContext de react y se crea un componente que luego lo ponemos en la app general
 export const CartContext = createContext({})
@@ -15,19 +16,29 @@ export default function CartContextProvider({ children }) {
     if (cartProducts?.length > 0) {
       ls.setItem('cart', JSON.stringify(cartProducts))
     }
-  }, [cartProducts]);
+  }, [cartProducts, ls]);
 
   useEffect(() => {
     // tratamos de capturar los productos del localstorage
     if (ls && ls.getItem('cart')) {
       setCartProducts(JSON.parse(ls.getItem('cart')));
     }
-  }, []);
+  }, [ls]);
 
   //   funcion para agregar productos por el id al carrito
   function addProductToCart(productId) {
-    setCartProducts(prev => [...prev, productId]);
-    alert('product added to cart');
+    if (cartProducts.length > 0) {
+      setCartProducts(prev => [...prev, productId]);
+    } else {
+      setCartProducts(prev => [...prev, productId]);
+      Swal.fire({
+        position: 'top',
+        icon: 'success',
+        title: 'Your work has been saved',
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
   }
 
   // funcion para sacar producto del carrito , sacamos del array con indexOf

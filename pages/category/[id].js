@@ -107,7 +107,7 @@ export default function CategoryPage({ category, subCategories, products: noFilt
                 setLoading(false);
             }, 1000)
         })
-    }, [filtersValues, sort]);
+    }, [filtersValues, sort,category._id]);
 
     return (
         <>

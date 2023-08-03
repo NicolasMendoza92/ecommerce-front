@@ -9,6 +9,7 @@ import Table from "@/components/Table";
 import Input from "@/components/Input";
 import Trash from "@/components/icons/Trash";
 import { useSession } from "next-auth/react";
+import Swal from "sweetalert2";
 
 
 const ColumnsWrapper = styled.div`
@@ -116,7 +117,7 @@ export default function CartPage() {
     axios.get('/api/settings?name=shippingFee').then(res => {
       setShippingFee(res.data.value)
     })
-  }, []);
+  }, [clearCart]);
 
   useEffect(() => {
     if (!session) {
@@ -135,20 +136,29 @@ export default function CartPage() {
     addProductToCart(id);
   }
   function lessOfThisProduct(id) {
-    if(cartProducts.length === 1){
+    if (cartProducts.length === 1) {
       emptyCart();
-    } else{
+    } else {
       removeProductToCart(id);
     }
-    
+
   }
 
-  function emptyCart() {
-    setCartProducts([]);
-    clearCart();
+  async function emptyCart() {
+    Swal.fire({
+      title: 'Are you sure you want clean the cart?',
+      showDenyButton: true,
+      confirmButtonText: 'Yes',
+      denyButtonText: `No`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        setCartProducts([]);
+        clearCart();
+      } 
+    })
+
   }
-
-
 
   // funcion para sumar totales
   let subTotal = 0;

@@ -77,6 +77,7 @@ const ButtonCartFeatured = styled.div`
 `;
 
 export default function Featured({ product }) {
+  console.log(product)
 
   // uso la funcion que cree en el componente CartContext usando usecontext y la seteo con el ID
   const { addProductToCart } = useContext(CartContext);
@@ -101,7 +102,7 @@ export default function Featured({ product }) {
                     Add to cart
                   </Button>
                 </ButtonCartFeatured>
-                <ButtonLink $outline href={'/products/' + product._id}>Read More</ButtonLink>
+                <ButtonLink $outline href={'/product/'+ product._id}>Read More</ButtonLink>
               </ButtonsWrapper>
             </div>
           </Column>

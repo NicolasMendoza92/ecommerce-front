@@ -31,7 +31,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function ProductsPage({ products, wishedProducts }) {
-  return (
+
+    return (
     <>
       <Header />
       <Center>
