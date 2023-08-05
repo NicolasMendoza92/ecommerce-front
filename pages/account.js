@@ -30,6 +30,8 @@ const CityHolder = styled.div`
 `;
 
 export default function AccountPage() {
+
+    const [user, setUser] = useState({});
     const [city, setCity] = useState('');
     const [postalCode, setPostalCode] = useState('');
     const [streetAddress, setStreetAddress] = useState('');
@@ -45,7 +47,7 @@ export default function AccountPage() {
     // way to create router in nextjs 
     const router = useRouter();
 
-    // quizas tenga que cambiar el puerto p-4000, por que cuando hago logout en front tmb sale en admin. Si yo solamente pongo session en vez de data:session me aparece mas información y yo necesito solamente los datos. 
+    //  Si yo solamente pongo session en vez de data:session me aparece mas información y yo necesito solamente los datos. 
     const { data: session } = useSession();
     async function logout() {
         await signOut({
@@ -56,7 +58,7 @@ export default function AccountPage() {
         await signIn('google');
     }
 
-    async function loginEmail(){
+    async function loginEmail() {
         await router.push('/login');
     }
 
@@ -99,6 +101,27 @@ export default function AccountPage() {
         })
     }
 
+    // // hacemos la validacion del token del user logeado
+    // const requestUserData = async () => {
+    //     const tokenLocal = getFromLocalStorage('token') || {};
+    //     try {
+    //         if (tokenLocal.token) {
+    //             const headers = { 'x-auth-token': tokenLocal.token };
+    //             const response = await axios.get('/api/auth/login', { headers });
+    //             setUser(response.data);
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+    //         localStorage.removeItem('token');
+    //         alert('Su sesión expiró.')
+    //         // window.location.href = '/';
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     requestUserData();
+    // }, []);
+
     return (
         <>
             <Header />
@@ -114,16 +137,16 @@ export default function AccountPage() {
                                 />
                                 {activeTab === 'Orders' && (
                                     <>
-                                    {!loadingOrders && (
-                                        <Spinner/>
-                                    )}
-                                    {loadingOrders && (
-                                        <div>
-                                            {orders.length > 0 && orders.map(order =>(
-                                                <OrderSingle key={order._id} {...order}/>
-                                            ))}
-                                        </div>
-                                    )}
+                                        {!loadingOrders && (
+                                            <Spinner />
+                                        )}
+                                        {loadingOrders && (
+                                            <div>
+                                                {orders.length > 0 && orders.map(order => (
+                                                    <OrderSingle key={order._id} {...order} />
+                                                ))}
+                                            </div>
+                                        )}
                                     </>
                                 )}
                                 {activeTab === 'Wishlist' && (

@@ -77,7 +77,6 @@ const ButtonCartFeatured = styled.div`
 `;
 
 export default function Featured({ product }) {
-  console.log(product)
 
   // uso la funcion que cree en el componente CartContext usando usecontext y la seteo con el ID
   const { addProductToCart } = useContext(CartContext);
