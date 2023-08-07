@@ -5,14 +5,14 @@ const bcryptjs = require('bcryptjs');
 export default async function handler(req,res){
 await mongooseConnect();
     // desectructuracion de prop del objeto
-    const { name, email, password} = req.body;
+    const { email, password} = req.body;
 
  if(req.method === 'POST'){
     try {
         // Revisando q el email sea unico
         let userfind = await User.findOne({ email });
         if (userfind) {
-            return res.status(400).send('Ya existe cuenta con este Email');
+            return res.status(400).send('User already exists');
         }
 
         // nuevos usuarios, hacemos que todos los logeados sean user comunes
@@ -29,11 +29,11 @@ await mongooseConnect();
         await user.save();
 
         //mensaje de exito
-        res.send("Usuario Creado Correctamente");
+        res.send("User create correctly");
         
     } catch (error) {
         console.log(error);
-        res.status(400).send("Hubo un error");
+        res.status(400).send("We have an error");
     }
  }   
     

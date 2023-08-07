@@ -227,12 +227,9 @@ export default function AccountPage() {
                         {!session && (
                             <WhiteBox>
                                 <h2>Account details</h2>
-                                <Button $loginout onClick={login}>Login</Button>
-                                {/* <Button $loginoutG onClick={loginGoogle}>Login with Google</Button>
-                                <Button $loginout onClick={loginEmail}>Login with Email</Button> */}
-                                <RegisterWrapper>
-                                    Don&apos;t have an account yet? <Link href={'/register'}>Sing up</Link>
-                                </RegisterWrapper>
+                                {/* <Button $loginout onClick={login}>Login</Button> */}
+                                <Button $loginoutG onClick={loginGoogle}>Login with Google</Button>
+                                <Button $loginout onClick={loginEmail}>Login with Email</Button>
                             </WhiteBox>
                         )}
 

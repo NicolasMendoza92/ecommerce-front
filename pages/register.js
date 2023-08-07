@@ -46,7 +46,7 @@ export default function RegisterPage() {
         try {
             await axios.post('/api/auth/register', input);
             alert('usuario creado')
-            router.push('/api/auth/signin')
+            router.push('/login')
         } catch (error) {
             console.error(error);
             if (input.name === '' && input.email === '' && input.password === '') {

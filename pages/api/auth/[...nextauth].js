@@ -5,6 +5,8 @@ import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from "next-auth/providers/credentials";
+import { mongooseConnect } from '@/lib/mongoose';
+import { User } from '@/models/User';
 
 export const authOptions = {
     secret: process.env.SECRET,
@@ -19,20 +21,25 @@ export const authOptions = {
             // uso lo que me da next auth, crea un formulario rapido con la ruta /auth/signin 
             name: "Credentials",
             credentials: {
-                email: { label: "Email", type: "email", placeholder: "email@email.com" },
-                password: { label: "Password", type: "password" }
+              email: { label: "Email", type: "text", placeholder: "jsmith" },
+              password: { label: "Password", type: "password" },
             },
-            async authorize(credentials) {
-                // validamos el usuario para ver que onda
-                const user = {
-                    email: 'test@gmail.com',
-                    password:'123456',
-                }
-                if(credentials?.email === user.email && credentials?.password === user.password){
-                    return user;
-                } else{
-                    return null
-                }       
+            async authorize(credentials, req) {
+                mongooseConnect();
+                // check user existance
+                const userFound = await User.findOne({
+                    email: credentials?.email,
+                  }).select("+password");
+          
+                  if (!userFound) throw new Error("Invalid credentials");
+          
+                  const passwordMatch = await compare(credentials.password,userFound.password);
+          
+                  if (!passwordMatch) throw new Error("Invalid credentials");
+          
+                  console.log(userFound);
+          
+                  return userFound;
             },
         })
     ],
@@ -40,4 +47,3 @@ export const authOptions = {
 }
 
 export default NextAuth(authOptions);
-
