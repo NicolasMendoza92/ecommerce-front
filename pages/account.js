@@ -9,6 +9,7 @@ import WhiteBox from "@/components/WhiteBox";
 import WishedProductBox from "@/components/WishedProductBox";
 import axios from "axios";
 import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
@@ -29,9 +30,17 @@ const CityHolder = styled.div`
   gap: 5px;
 `;
 
+const RegisterWrapper = styled.div`
+margin-top: 10px;
+a{
+    text-decoration: none;
+    font-weight: bold;
+
+}
+`
+
 export default function AccountPage() {
 
-    const [user, setUser] = useState({});
     const [city, setCity] = useState('');
     const [postalCode, setPostalCode] = useState('');
     const [streetAddress, setStreetAddress] = useState('');
@@ -49,17 +58,23 @@ export default function AccountPage() {
 
     //  Si yo solamente pongo session en vez de data:session me aparece mas información y yo necesito solamente los datos. 
     const { data: session } = useSession();
+    console.log(session)
+
     async function logout() {
         await signOut({
             callbackUrl: process.env.NEXT_PUBLIC_URL,
         })
     }
-    async function login() {
+    async function loginGoogle() {
         await signIn('google');
     }
 
     async function loginEmail() {
         await router.push('/login');
+    }
+
+    async function login() {
+        router.push('/api/auth/signin');
     }
 
     async function saveAddress() {
@@ -101,26 +116,6 @@ export default function AccountPage() {
         })
     }
 
-    // // hacemos la validacion del token del user logeado
-    // const requestUserData = async () => {
-    //     const tokenLocal = getFromLocalStorage('token') || {};
-    //     try {
-    //         if (tokenLocal.token) {
-    //             const headers = { 'x-auth-token': tokenLocal.token };
-    //             const response = await axios.get('/api/auth/login', { headers });
-    //             setUser(response.data);
-    //         }
-    //     } catch (error) {
-    //         console.error(error);
-    //         localStorage.removeItem('token');
-    //         alert('Su sesión expiró.')
-    //         // window.location.href = '/';
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     requestUserData();
-    // }, []);
 
     return (
         <>
@@ -226,13 +221,18 @@ export default function AccountPage() {
                                 <Button $loginout onClick={logout}>
                                     Logout
                                 </Button>
+
                             </WhiteBox>
                         )}
                         {!session && (
                             <WhiteBox>
                                 <h2>Account details</h2>
-                                <Button $loginoutG onClick={login}>Login with Google</Button>
-                                <Button $loginout onClick={loginEmail}>Login with Email</Button>
+                                <Button $loginout onClick={login}>Login</Button>
+                                {/* <Button $loginoutG onClick={loginGoogle}>Login with Google</Button>
+                                <Button $loginout onClick={loginEmail}>Login with Email</Button> */}
+                                <RegisterWrapper>
+                                    Don&apos;t have an account yet? <Link href={'/register'}>Sing up</Link>
+                                </RegisterWrapper>
                             </WhiteBox>
                         )}
 

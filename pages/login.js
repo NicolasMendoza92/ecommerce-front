@@ -1,10 +1,8 @@
 import Button from '@/components/Button'
 import Input from '@/components/Input'
 import WhiteBox from '@/components/WhiteBox'
-import { saveInLocalStorage } from '@/lib/localStorage'
-import axios from 'axios'
+import { signIn } from 'next-auth/react'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { styled } from 'styled-components'
 
@@ -27,38 +25,12 @@ a{
 
 export default function LoginPage() {
 
-    const [input, setInput] = useState({ email: '', password: '' });
-    const router = useRouter()
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    const handleChange = (e) => {
-        const { value, name } = e.target;
-        const newInput = { ...input, [name]: value };
-        if (newInput.email.length < 35
-            && newInput.password.length < 30) {
-            setInput(newInput);
-        } else {
-            alert('Alcanzaste el numero maximo de caracteres')
-        }
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            const response = await axios.post('/api/auth/login', input);
-            const { token, email } = response.data;
-            saveInLocalStorage({ key: 'token', value: { token } });
-            console.log(response);
-            router.push('/')
-        }
-        catch (error) {
-            console.error(error);
-            if (input.email === '' && input.password === '') {
-                alert("Faltan datos")
-            } else {
-                alert(JSON.stringify(error.response.data));
-            }
-        }
-
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        signIn('credentials',{email, password, callbackUrl:'/account'})
     };
 
     return (
@@ -68,12 +40,12 @@ export default function LoginPage() {
                 <form onSubmit={handleSubmit}>
                     <Input type="email"
                         placeholder="Email"
-                        name="email"
-                        onChange={(e) => handleChange(e)} />
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)} />
                     <Input type="password"
                         placeholder="Password"
-                        name="password"
-                        onChange={(e) => handleChange(e)} />
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)} />
                     <Button type="submit" $payment >Login</Button>
                 </form>
                 <RegisterWrapper>
