@@ -43,20 +43,21 @@ export default function RegisterPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            await axios.post('/api/auth/register', input);
-            alert('usuario creado')
-            router.push('/login')
-        } catch (error) {
-            console.error(error);
-            if (input.name === '' && input.email === '' && input.password === '') {
-                alert("Faltan datos")
-            }
-            else {
-                alert(JSON.stringify(error.response.data));
-            }
+        alert('not working')
+        // try {
+        //     await axios.post('/api/auth/register', input);
+        //     alert('usuario creado')
+        //     router.push('/login')
+        // } catch (error) {
+        //     console.error(error);
+        //     if (input.name === '' && input.email === '' && input.password === '') {
+        //         alert("Faltan datos")
+        //     }
+        //     else {
+        //         alert(JSON.stringify(error.response.data));
+        //     }
 
-        }
+        // }
 
     };
 

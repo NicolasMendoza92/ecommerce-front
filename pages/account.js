@@ -9,7 +9,6 @@ import WhiteBox from "@/components/WhiteBox";
 import WishedProductBox from "@/components/WishedProductBox";
 import axios from "axios";
 import { signIn, signOut, useSession } from "next-auth/react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
@@ -58,7 +57,6 @@ export default function AccountPage() {
 
     //  Si yo solamente pongo session en vez de data:session me aparece mas información y yo necesito solamente los datos. 
     const { data: session } = useSession();
-    console.log(session)
 
     async function logout() {
         await signOut({
@@ -66,11 +64,11 @@ export default function AccountPage() {
         })
     }
     async function loginGoogle() {
-        await signIn('google');
+        await signIn('google',{callbackUrl: process.env.NEXT_PUBLIC_URL});
     }
 
-    async function loginEmail() {
-        await router.push('/login');
+    async function loginGithub() {
+        await signIn('github', {callbackUrl: process.env.NEXT_PUBLIC_URL});
     }
 
     async function login() {
@@ -227,9 +225,9 @@ export default function AccountPage() {
                         {!session && (
                             <WhiteBox>
                                 <h2>Account details</h2>
-                                {/* <Button $loginout onClick={login}>Login</Button> */}
-                                <Button $loginoutG onClick={loginGoogle}>Login with Google</Button>
-                                <Button $loginout onClick={loginEmail}>Login with Email</Button>
+                                <Button $loginout onClick={login}>Login</Button>
+                                {/* <Button $loginoutG onClick={loginGoogle}>Login with Google</Button>
+                                <Button $loginout onClick={loginGithub}>Login with GitHub</Button> */}
                             </WhiteBox>
                         )}
 

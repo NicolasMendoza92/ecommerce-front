@@ -30,12 +30,7 @@ export default function LoginPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await signIn('credentials', {
-            email,
-            password,
-            callbackUrl: '/account',
-            redirect:false,
-        })
+        alert('not working')
     };
 
     return (
