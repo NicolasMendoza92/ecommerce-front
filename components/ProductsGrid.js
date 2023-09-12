@@ -9,7 +9,7 @@ const StyledProductsGrid = styled.div`
   @media screen and (min-width: 768px) {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
-  
+  padding: 10px;
 `;
 
 export default function ProductsGrid({newProducts, products, prodFinded, wishedProducts=[]}) {

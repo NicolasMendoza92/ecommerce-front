@@ -144,6 +144,7 @@ export default function CartPage() {
 
   }
 
+
   async function emptyCart() {
     Swal.fire({
       title: 'Are you sure you want clean the cart?',
@@ -155,7 +156,7 @@ export default function CartPage() {
       if (result.isConfirmed) {
         setCartProducts([]);
         clearCart();
-      } 
+      }
     })
 
   }
@@ -213,9 +214,15 @@ export default function CartPage() {
           <Box>
             <HeaderTableCart>
               <h1>Cart</h1>
-              <Button $trash onClick={() => emptyCart()} >
-                <Trash />
-              </Button>
+              {cartProducts.length >= 1 &&
+                <Button $trash onClick={() => emptyCart()} >
+                  <Trash />
+                </Button>
+              }{
+                cartProducts.length === 0 &&
+                <div></div>
+              }
+
             </HeaderTableCart>
             {!cartProducts?.length && (
               <div>Your cart is empty</div>
@@ -274,7 +281,6 @@ export default function CartPage() {
           {!!cartProducts?.length && (
             <Box>
               <h2>Order information</h2>
-
               <Input type="text"
                 placeholder="Name"
                 value={session?.user.name}

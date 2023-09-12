@@ -32,9 +32,8 @@ export default function CartContextProvider({ children }) {
     } else {
       setCartProducts(prev => [...prev, productId]);
       Swal.fire({
-        position: 'top',
         icon: 'success',
-        title: 'Your work has been saved',
+        title: 'Product added',
         showConfirmButton: false,
         timer: 1500
       });

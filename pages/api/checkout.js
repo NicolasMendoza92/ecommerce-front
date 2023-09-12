@@ -28,7 +28,6 @@ export default async function handler(req, res) {
         const quantity = productsIds.filter(id => id === productId)?.length;
         // tratando que se muestre la imagen
         const image = productInfo.images.slice(0,1).shift();
-        console.log(image)
         // si la cantidad del carrito es mayor a cero y tenemos info de producto entonces
         if (quantity > 0 && productInfo) {
             line_items.push({

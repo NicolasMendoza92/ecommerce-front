@@ -7,9 +7,14 @@ import axios from "axios";
 import { CartContext } from "./CartContext";
 import Button from "./Button";
 
+const CardProduct = styled.div`
+
+`
+
 const WhiteLinkBox = styled(Link)`
   background-color: #fff;
   padding: 20px;
+  z-index: -1;
   height: 130px;
   text-align: center;
   display: flex;
@@ -98,7 +103,7 @@ export default function ProductBox({ _id, title, price, images, wishedProducts})
   }
 
   return (
-    <div>
+    <CardProduct>
       <WhiteLinkBox href={url}>
         <div>
           <WishListBtn $wished={isWished} onClick={addToWishList}>
@@ -116,6 +121,6 @@ export default function ProductBox({ _id, title, price, images, wishedProducts})
           <Button $cartbtn onClick={() => addProductToCart(_id)}> Add to cart</Button>
         </PriceRow>
       </ProductInfoBox>
-    </div >
+    </CardProduct >
   )
 }

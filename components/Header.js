@@ -16,7 +16,7 @@ const Logo = styled(Link)`
   color:#fff;
   text-decoration:none;
   position: relative;
-  z-index: 3;
+  z-index: 1;
 `;
 
 const Wrapper = styled.div`
@@ -55,6 +55,16 @@ const NavLink = styled(Link)`
   }
 `;
 
+const SearchLink = styled(Link)`
+  position: relative;
+  color:#aaa;
+  text-decoration:none;
+  padding: 10px 0;
+  @media screen and (min-width: 768px) {
+    padding:0;
+  }
+`;
+
 const NavButton = styled.button`
   background-color: transparent;
   width: 30px;
@@ -64,7 +74,6 @@ const NavButton = styled.button`
   cursor: pointer;
   /* con esto lo ponemos adelante del menu desplegable */
   position: relative;
-  z-index: 3;
   @media screen and (min-width: 768px) {
     display: none;
   }
@@ -108,7 +117,7 @@ export default function Header() {
             <NavLink href={'/cart'}>Cart ({cartProducts.length})</NavLink>
           </StyledNav>
           <SideIcons>
-          <Link href={'/search'}><SearchIcon/></Link>
+          <SearchLink href={'/search'}><SearchIcon/></SearchLink>
           <NavButton onClick={() => setMobileNavActive(prev => !prev)}>
             <BarsIcon />
           </NavButton>
