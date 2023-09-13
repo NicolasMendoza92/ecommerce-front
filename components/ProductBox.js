@@ -6,8 +6,7 @@ import HeartSolidIcon from "./icons/HeartSolidIcon";
 import axios from "axios";
 import { CartContext } from "./CartContext";
 import CartIcon from "./icons/CartIcon";
-import FlyingButton from 'react-flying-item'
-import  { ButtonStyle } from "@/components/Button";
+import  Button, { ButtonStyle } from "@/components/Button";
 
 const CardBox = styled.div`
 display:inline-grid;
@@ -134,18 +133,9 @@ export default function ProductBox({ _id, title, price, images, wishedProducts }
       </ProductInfoBox>
       <ButtonsBoxWrapper >
         <ButtonFlyingWrapper onClick={() => addProductToCart(_id)}>
-          <FlyingButton
-            src={images?.[0]}
-            targetLeft={'80%'}
-            flyingItemStyling={{
-              width: 'auto',
-              height: 'auto',
-              maxWidth: '80px',
-              maxHeight: '60px',
-              borderRadius: 0,
-            }}>
+          <Button>
             Add to cart <CartIcon />
-          </FlyingButton>
+          </Button>
         </ButtonFlyingWrapper>
         <WishListBtn $wished={isWished} onClick={addToWishList}>
           {isWished ? <HeartSolidIcon /> : <HeartOutlineIcon />}

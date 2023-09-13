@@ -32,6 +32,12 @@ export default function CartContextProvider({ children }) {
     } else {
       setCartProducts(prev => [...prev, productId]);
     }
+    Swal.fire({
+      icon: 'success',
+      title: 'Product added',
+      showConfirmButton: false,
+      timer: 1500
+    });
   }
 
    //   funcion para agregar productos por el id al carrito

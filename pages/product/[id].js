@@ -12,7 +12,7 @@ import { useContext } from "react";
 import styled from "styled-components";
 import CartIcon from "@/components/icons/CartIcon";
 import ProductReviews from "@/components/ProductReviews";
-import FlyingButton from 'react-flying-item'
+
 
 
 const ColWrapper = styled.div`
@@ -72,18 +72,9 @@ export default function ProductPage({ product }) {
                                 <Price>${product.price}</Price>
                             </div>
                             <ButtonCartWrapper onClick={() => addProductToCart(product._id)}>
-                                <FlyingButton
-                                    src={product.images?.[0]}
-                                    targetLeft={'80%'}
-                                    flyingItemStyling={{
-                                        width: 'auto',
-                                        height: 'auto',
-                                        maxWidth: '80px',
-                                        maxHeight: '60px',
-                                        borderRadius: 0,
-                                    }}>
+                                <Button>
                                     Add to cart <CartIcon />
-                                </FlyingButton>
+                                </Button>
                             </ButtonCartWrapper>
                             <div>
                                 <Button $primary onClick={goBack}>
