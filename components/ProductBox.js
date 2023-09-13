@@ -5,8 +5,9 @@ import { useContext, useEffect, useState } from "react";
 import HeartSolidIcon from "./icons/HeartSolidIcon";
 import axios from "axios";
 import { CartContext } from "./CartContext";
-import Button from "./Button";
 import CartIcon from "./icons/CartIcon";
+import FlyingButton from 'react-flying-item'
+import  { ButtonStyle } from "@/components/Button";
 
 const CardBox = styled.div`
 display:inline-grid;
@@ -86,7 +87,19 @@ svg{
   width: 20px;
 }
 `
-
+// se hace para poder estilizar el flying button de react
+const ButtonFlyingWrapper = styled.div`
+button {
+  ${ButtonStyle}
+  background-color: #0D3D29;
+    border: 1px solid #0D3D29;
+    color:#fff;
+    svg{
+    height: 20px;
+    margin:0px 0px 0px 5px;
+}
+}
+`
 
 export default function ProductBox({ _id, title, price, images, wishedProducts }) {
 
@@ -118,13 +131,26 @@ export default function ProductBox({ _id, title, price, images, wishedProducts }
             ${price}
           </Price>
         </PriceRow>
-        </ProductInfoBox>
-        <ButtonsBoxWrapper>
-        <Button $cartbtn onClick={() => addProductToCart(_id)}>Add to cart <CartIcon/></Button>
-          <WishListBtn $wished={isWished} onClick={addToWishList}>
-            {isWished ? <HeartSolidIcon /> : <HeartOutlineIcon />}
-          </WishListBtn>
-        </ButtonsBoxWrapper>   
+      </ProductInfoBox>
+      <ButtonsBoxWrapper >
+        <ButtonFlyingWrapper onClick={() => addProductToCart(_id)}>
+          <FlyingButton
+            src={images?.[0]}
+            targetLeft={'80%'}
+            flyingItemStyling={{
+              width: 'auto',
+              height: 'auto',
+              maxWidth: '80px',
+              maxHeight: '60px',
+              borderRadius: 0,
+            }}>
+            Add to cart <CartIcon />
+          </FlyingButton>
+        </ButtonFlyingWrapper>
+        <WishListBtn $wished={isWished} onClick={addToWishList}>
+          {isWished ? <HeartSolidIcon /> : <HeartOutlineIcon />}
+        </WishListBtn>
+      </ButtonsBoxWrapper>
     </CardBox >
   )
 }

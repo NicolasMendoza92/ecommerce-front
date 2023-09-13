@@ -22,6 +22,10 @@ export const ButtonStyle = css`
   border:"none";
   width: 100%;
   margin:10px;
+  svg{
+    height: 20px;
+    margin-right: 5px;
+  }
 `}
  ${props => props.$outline && css`
   background-color: "none";

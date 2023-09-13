@@ -31,6 +31,15 @@ export default function CartContextProvider({ children }) {
       setCartProducts(prev => [...prev, productId]);
     } else {
       setCartProducts(prev => [...prev, productId]);
+    }
+  }
+
+   //   funcion para agregar productos por el id al carrito
+   function addFeaturedToCart(productId) {
+    if (cartProducts.length > 0) {
+      setCartProducts(prev => [...prev, productId]);
+    } else {
+      setCartProducts(prev => [...prev, productId]);
       Swal.fire({
         icon: 'success',
         title: 'Product added',
@@ -60,7 +69,7 @@ export default function CartContextProvider({ children }) {
 
   return (
     // como no es un unico valor, lo poenmos como objeto entre {} y le voy pasando lo que quiero que sea proveedor para toda la app
-    <CartContext.Provider value={{ cartProducts, setCartProducts, addProductToCart, removeProductToCart, clearCart }}>
+    <CartContext.Provider value={{ cartProducts, setCartProducts, addProductToCart, removeProductToCart, clearCart, addFeaturedToCart }}>
       {children}
     </CartContext.Provider>
   )

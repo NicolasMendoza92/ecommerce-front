@@ -79,12 +79,7 @@ const ButtonCartFeatured = styled.div`
 export default function Featured({ product }) {
 
   // uso la funcion que cree en el componente CartContext usando usecontext y la seteo con el ID
-  const { addProductToCart } = useContext(CartContext);
-
-  function addFeaturedToCart() {
-    addProductToCart(product._id)
-  };
-
+  const { addFeaturedToCart } = useContext(CartContext);
 
   return (
     <Bg>
@@ -96,12 +91,12 @@ export default function Featured({ product }) {
               <Desc>{product.description}</Desc>
               <ButtonsWrapper>
                 <ButtonCartFeatured >
-                  <Button onClick={addFeaturedToCart} $cartbtn>
+                  <Button  onClick={() => addFeaturedToCart(product._id)} $cartbtn>
                     <CartIcon />
                     Add to cart
                   </Button>
                 </ButtonCartFeatured>
-                <ButtonLink $outline href={'/product/'+ product._id}>Read More</ButtonLink>
+                <ButtonLink $outline href={'/product/'+ product._id}>See More</ButtonLink>
               </ButtonsWrapper>
             </div>
           </Column>

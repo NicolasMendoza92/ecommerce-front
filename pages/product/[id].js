@@ -12,6 +12,7 @@ import { useContext } from "react";
 import styled from "styled-components";
 import CartIcon from "@/components/icons/CartIcon";
 import ProductReviews from "@/components/ProductReviews";
+import FlyingButton from 'react-flying-item'
 
 
 const ColWrapper = styled.div`
@@ -38,6 +39,10 @@ const ButtonCartWrapper = styled.div`
   background-color: #0D3D29;
     border: 1px solid #0D3D29;
     color:#fff;
+    svg{
+    height: 20px;
+    margin:0px 0px 0px 5px;
+    }
 }
 `
 
@@ -67,10 +72,18 @@ export default function ProductPage({ product }) {
                                 <Price>${product.price}</Price>
                             </div>
                             <ButtonCartWrapper onClick={() => addProductToCart(product._id)}>
-                                <Button $cartbtn >
-                                    <CartIcon />
-                                    Add to cart
-                                </Button>
+                                <FlyingButton
+                                    src={product.images?.[0]}
+                                    targetLeft={'80%'}
+                                    flyingItemStyling={{
+                                        width: 'auto',
+                                        height: 'auto',
+                                        maxWidth: '80px',
+                                        maxHeight: '60px',
+                                        borderRadius: 0,
+                                    }}>
+                                    Add to cart <CartIcon />
+                                </FlyingButton>
                             </ButtonCartWrapper>
                             <div>
                                 <Button $primary onClick={goBack}>
@@ -82,7 +95,7 @@ export default function ProductPage({ product }) {
                         </PriceRow>
                     </div>
                 </ColWrapper>
-                <ProductReviews product={product}/>
+                <ProductReviews product={product} />
             </Center>
         </>
     );
