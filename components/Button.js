@@ -34,7 +34,18 @@ export const ButtonStyle = css`
 `}
   ${props => props.$block && css`
     display: block;
-    width: 100%;
+    background-color: grey;
+  color: #fff;
+  border:"none";
+  padding: 5px;
+  svg{
+    height: 20px;
+    margin:auto;
+  }
+  &:hover{
+    background-color: white;
+  color: grey;
+  }
   `}
   ${props => props.size === 'lg' && css`
     font-size:1.2rem;
@@ -59,10 +70,15 @@ export const ButtonStyle = css`
   padding:0.6rem;
   color:#fff;
 `}
-  ${props => props.$addless && css`
-    background-color: #F0F3F3;
-    padding:0.8rem;
-    color:#000;
+  ${props => props.$pagination && css`
+  background-color:#D3D3D3;
+    padding:0.5rem;
+    color:#fff;
+    margin: 5px;
+    &:hover{
+      background-color:white;
+      color: grey;
+    }
   `}
   ${props => props.$addProduct && css`
   background-color: #0D3D29;

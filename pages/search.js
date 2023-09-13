@@ -49,7 +49,7 @@ export default function SearchPage({ products, wishedProducts }) {
                     placeholder="Search for products"
                     autoFocus
                 />
-                <ProductsGrid prodFinded={prodFinded} wishedProducts={wishedProducts} />
+                <ProductsGrid products={prodFinded} wishedProducts={wishedProducts} />
                 {prodFinded.length === 0 &&
                     <WhiteBox>
                         <div>Ops :( no products found</div>

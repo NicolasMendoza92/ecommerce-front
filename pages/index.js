@@ -17,7 +17,7 @@ export default function Home({ featuredProduct, newProducts, wishedNewProducts }
     <div>
       <Header />
       <Featured product={featuredProduct} />
-      <NewProducts newProducts={newProducts} wishedProducts={wishedNewProducts} />
+      <NewProducts products={newProducts} wishedProducts={wishedNewProducts} />
     </div>
   );
 }
