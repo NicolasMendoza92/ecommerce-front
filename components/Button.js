@@ -43,6 +43,10 @@ export const ButtonStyle = css`
     background-color: #0D3D29;
     border: 1px solid #0D3D29;
     color:#fff;
+    svg{
+    height: 20px;
+    margin:0px 0px 0px 5px;
+  }
   `}
   ${props => props.$payment && css`
   width: 100%;
