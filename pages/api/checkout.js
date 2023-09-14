@@ -43,7 +43,6 @@ export default async function handler(req, res) {
     }
 
     const session = await getServerSession(req,res,authOptions);
-
     // esto se hace, independientemente de que el pago se haya hecho o no, es una orden.
     // creo una order con los siguientes parametros, que son los de mi Models->Order.js, para luego enviarla a mi base de datos de mongoose. 
     const orderDoc = await Order.create({

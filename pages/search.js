@@ -42,7 +42,7 @@ export default function SearchPage({ products, wishedProducts }) {
     return (
         <>
             <Header />
-            <Center>
+            <Center >
                 <SearchInput
                     value={prodSearched}
                     onChange={e => setProdSearched(e.target.value)}

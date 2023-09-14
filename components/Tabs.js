@@ -22,9 +22,6 @@ color:#999;
 `}
 `
 
-
-
-
 export default function Tabs({ tabs, active, onChange }) {
 
   return (

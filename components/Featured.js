@@ -71,8 +71,14 @@ const ButtonCartFeatured = styled.div`
   button{
     ${ButtonStyle}
   background: #fff;
-  color: #000;
-  border:"none";
+  color: black;
+  border: 1px solid #fff;
+  &:hover{
+border: 1px solid #fff;
+color: white;
+background: transparent;
+transition-duration: 0.3s;
+  }
 }
 `;
 
@@ -91,7 +97,7 @@ export default function Featured({ product }) {
               <Desc>{product.description}</Desc>
               <ButtonsWrapper>
                 <ButtonCartFeatured >
-                  <Button  onClick={() => addFeaturedToCart(product._id)} $cartbtn>
+                  <Button  onClick={() => addFeaturedToCart(product._id)}>
                     <CartIcon />
                     Add to cart
                   </Button>

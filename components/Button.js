@@ -55,13 +55,23 @@ export const ButtonStyle = css`
     }
   `}
   ${props => props.$cartbtn && css`
-    background-color: #0D3D29;
+    background:transparent;
     border: 1px solid #0D3D29;
-    color:#fff;
+    color: #0D3D29;
     svg{
     height: 20px;
     margin:0px 0px 0px 5px;
+    color: #0D3D29;
   }
+  &:hover{
+    transition-duration: 0.4s;
+      background-color:#0D3D29;
+      color: white;
+      svg{
+        transition-duration: 0.4s;
+        color: white;
+      }
+    }
   `}
   ${props => props.$payment && css`
   width: 100%;

@@ -31,13 +31,14 @@ export default function CartContextProvider({ children }) {
       setCartProducts(prev => [...prev, productId]);
     } else {
       setCartProducts(prev => [...prev, productId]);
+      Swal.fire({
+        icon: 'success',
+        title: 'Product added',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
-    Swal.fire({
-      icon: 'success',
-      title: 'Product added',
-      showConfirmButton: false,
-      timer: 1500
-    });
+    
   }
 
    //   funcion para agregar productos por el id al carrito

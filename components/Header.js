@@ -5,6 +5,7 @@ import BarsIcon from "./icons/Bars";
 import { useContext, useState } from "react";
 import { CartContext } from "./CartContext";
 import SearchIcon from "./icons/SearchIcon";
+import { useRouter } from "next/router";
 
 const StyledHeader = styled.header`
 background-color:  #222;
@@ -53,6 +54,7 @@ const NavLink = styled(Link)`
   @media screen and (min-width: 768px) {
     padding:0;
   }
+
 `;
 
 const SearchLink = styled(Link)`
@@ -98,7 +100,11 @@ a{
 export default function Header() {
 
   // uso UseContext para traer datos generales de toda la app y los guardo en vbles que creo
-  const {cartProducts} = useContext(CartContext);
+  const { cartProducts } = useContext(CartContext);
+   // way to create router in nextjs 
+   const router = useRouter();
+   const { pathname } = router;
+
 
   const [mobileNavActive, setMobileNavActive] = useState(false);
 
@@ -109,7 +115,7 @@ export default function Header() {
         <Wrapper>
           <Logo href={'/'}>My Store</Logo>
           {/* seteamos estados, y le ponemos propiedad de estilo, cuando mobileNavActive es true (aprieto boton hamburguesa), entonces se activa la prop css */}
-          <StyledNav $mobileNavActive ={mobileNavActive}>
+          <StyledNav $mobileNavActive={mobileNavActive}>
             <NavLink href={'/'}>Home</NavLink>
             <NavLink href={'/products'}>All products</NavLink>
             <NavLink href={'/categories'}>Categories</NavLink>
@@ -117,10 +123,10 @@ export default function Header() {
             <NavLink href={'/cart'}>Cart ({cartProducts.length})</NavLink>
           </StyledNav>
           <SideIcons>
-          <SearchLink href={'/search'}><SearchIcon/></SearchLink>
-          <NavButton onClick={() => setMobileNavActive(prev => !prev)}>
-            <BarsIcon />
-          </NavButton>
+            <SearchLink href={'/search'}><SearchIcon /></SearchLink>
+            <NavButton onClick={() => setMobileNavActive(prev => !prev)}>
+              <BarsIcon />
+            </NavButton>
           </SideIcons>
         </Wrapper>
       </Center>

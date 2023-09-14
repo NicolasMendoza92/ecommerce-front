@@ -6,7 +6,7 @@ import HeartSolidIcon from "./icons/HeartSolidIcon";
 import axios from "axios";
 import { CartContext } from "./CartContext";
 import CartIcon from "./icons/CartIcon";
-import  Button, { ButtonStyle } from "@/components/Button";
+import Button from "@/components/Button";
 
 const CardBox = styled.div`
 display:inline-grid;
@@ -25,6 +25,10 @@ const WhiteLinkBox = styled(Link)`
     max-width: 100%;
     max-height: 100px;
   }
+  &:hover{
+    transition-duration: 0.4s;
+      box-shadow:4px 3px 2px #888888  ;
+    }
 
 `;
 
@@ -69,35 +73,25 @@ const Price = styled.div`
 `;
 
 const WishListBtn = styled.button`
-border: 0;
-width: 40px !important;
-height: 40px;
-top: 0;
-right: 0;
-background:transparent;
+ border:0;
+  width: 40px !important;
+  height: 40px;
+
+  background:transparent;
 cursor: pointer;
 ${props => props.$wished ? `
 color:red;
-
 `: `
-color:black;
+color:#0D3D29;
 `}
 svg{
-  width: 20px;
+  width: 25px;
 }
-`
-// se hace para poder estilizar el flying button de react
-const ButtonFlyingWrapper = styled.div`
-button {
-  ${ButtonStyle}
-  background-color: #0D3D29;
-    border: 1px solid #0D3D29;
-    color:#fff;
-    svg{
-    height: 20px;
-    margin:0px 0px 0px 5px;
-}
-}
+
+&:hover{
+  transition-duration:0.3s;
+      color:red;
+    }
 `
 
 export default function ProductBox({ _id, title, price, images, wishedProducts }) {
@@ -119,7 +113,7 @@ export default function ProductBox({ _id, title, price, images, wishedProducts }
   }
 
   return (
-    <CardBox>
+    <CardBox data-aos="fade-up">
       <WhiteLinkBox href={url}>
         <img src={images?.[0]} alt="" />
       </WhiteLinkBox>
@@ -132,12 +126,10 @@ export default function ProductBox({ _id, title, price, images, wishedProducts }
         </PriceRow>
       </ProductInfoBox>
       <ButtonsBoxWrapper >
-        <ButtonFlyingWrapper onClick={() => addProductToCart(_id)}>
-          <Button>
-            Add to cart <CartIcon />
-          </Button>
-        </ButtonFlyingWrapper>
-        <WishListBtn $wished={isWished} onClick={addToWishList}>
+      <Button $cartbtn onClick={() => addProductToCart(_id)}>
+          Add to cart <CartIcon />
+        </Button>
+      <WishListBtn $wished={isWished} onClick={addToWishList}>
           {isWished ? <HeartSolidIcon /> : <HeartOutlineIcon />}
         </WishListBtn>
       </ButtonsBoxWrapper>

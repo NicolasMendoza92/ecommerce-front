@@ -94,6 +94,8 @@ export default function CartPage() {
 
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false)
+
   useEffect(() => {
     if (cartProducts.length > 0) {
       axios.post('/api/cart', { ids: cartProducts })
@@ -124,6 +126,8 @@ export default function CartPage() {
       return;
     }
     axios.get('/api/address').then(response => {
+      setName(response.data.name);
+      setEmail(response.data.email);
       setCity(response.data.city);
       setPostalCode(response.data.postalCode);
       setStreetAddress(response.data.streetAddress);
@@ -141,9 +145,7 @@ export default function CartPage() {
     } else {
       removeProductToCart(id);
     }
-
   }
-
 
   async function emptyCart() {
     Swal.fire({
@@ -172,21 +174,24 @@ export default function CartPage() {
 
   // vamos a nuestra api de checkout
 
-  async function goToPayment() {
-    const response = await axios.post('/api/checkout', {
-      name: session?.user?.name,
-      email: session?.user?.email,
-      city,
-      postalCode,
-      streetAddress,
-      country,
-      cartProducts,
-      total,
-    });
-    // si me responde con la direccion, voy directamente a esa pantalla de pago de stripe para ejecutar el pago.
-    if (response.data.url) {
-      window.location = response.data.url;
+  async function onSubmit(e) {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const response = await axios.post('/api/checkout', {
+        name,email,city,postalCode,streetAddress,country,
+        cartProducts,total,
+      });
+      // si me responde con la direccion, voy directamente a esa pantalla de pago de stripe para ejecutar el pago.
+      if (response.data.url) {
+        window.location = response.data.url;
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
     }
+
   }
 
 
@@ -281,41 +286,49 @@ export default function CartPage() {
           {!!cartProducts?.length && (
             <Box>
               <h2>Order information</h2>
-              <Input type="text"
-                placeholder="Name"
-                value={session?.user.name}
-                name="name"
-                onChange={ev => setName(ev.target.value)} />
-              <Input type="email"
-                placeholder="Email"
-                value={session?.user.email}
-                name="email"
-                onChange={ev => setEmail(ev.target.value)} />
-              <CityHolder>
+              <form onSubmit={onSubmit}>
                 <Input type="text"
-                  placeholder="City"
-                  value={city}
-                  name="city"
-                  onChange={ev => setCity(ev.target.value)} />
+                  placeholder="Name"
+                  value={name}
+                  name="name"
+                  required
+                  onChange={ev => setName(ev.target.value)} />
+                <Input type="email"
+                  placeholder="Email"
+                  value={email}
+                  name="email"
+                  required
+                  onChange={ev => setEmail(ev.target.value)} />
+                <CityHolder>
+                  <Input type="text"
+                    placeholder="City"
+                    value={city}
+                    name="city"
+                    required
+                    onChange={ev => setCity(ev.target.value)} />
+                  <Input type="text"
+                    placeholder="Postal Code"
+                    value={postalCode}
+                    name="postalCode"
+                    required
+                    onChange={ev => setPostalCode(ev.target.value)} />
+                </CityHolder>
                 <Input type="text"
-                  placeholder="Postal Code"
-                  value={postalCode}
-                  name="postalCode"
-                  onChange={ev => setPostalCode(ev.target.value)} />
-              </CityHolder>
-              <Input type="text"
-                placeholder="Street Address"
-                value={streetAddress}
-                name="streetAddress"
-                onChange={ev => setStreetAddress(ev.target.value)} />
-              <Input type="text"
-                placeholder="Country"
-                value={country}
-                name="country"
-                onChange={ev => setCountry(ev.target.value)} />
-              <Button $payment onClick={goToPayment} >
-                Continue to payment
-              </Button>
+                  placeholder="Street Address"
+                  value={streetAddress}
+                  name="streetAddress"
+                  required
+                  onChange={ev => setStreetAddress(ev.target.value)} />
+                <Input type="text"
+                  placeholder="Country"
+                  value={country}
+                  name="country"
+                  required
+                  onChange={ev => setCountry(ev.target.value)} />
+                <Button $payment type="submit" disabled={isLoading}>
+                  {isLoading ? 'Loading...' : 'Continue with payment'}
+                </Button>
+              </form>
             </Box>
           )}
 

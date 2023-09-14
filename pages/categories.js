@@ -52,7 +52,7 @@ export default function CategoriesPage({ mainCategories, categoriesProducts, wis
             <Header />
             <Center>
                 {mainCategories.map(cat => (
-                    <CategoryWrapper key={cat._id}>
+                    <CategoryWrapper data-aos="fade-up" key={cat._id}>
                         <CategoriesHead>
                             <h2>{cat.name} </h2>
                             <div>

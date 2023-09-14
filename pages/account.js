@@ -39,7 +39,11 @@ a{
 `
 
 export default function AccountPage() {
+    //  Si yo solamente pongo session en vez de data:session me aparece mas información y yo necesito solamente los datos. 
+    const { data: session } = useSession();
 
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const [city, setCity] = useState('');
     const [postalCode, setPostalCode] = useState('');
     const [streetAddress, setStreetAddress] = useState('');
@@ -51,12 +55,9 @@ export default function AccountPage() {
     const [orders, setOrders] = useState([]);
 
     const [wishedProducts, setWishedProducts] = useState([]);
-
+    const [isLoading, setIsLoading] = useState(false)
     // way to create router in nextjs 
     const router = useRouter();
-
-    //  Si yo solamente pongo session en vez de data:session me aparece mas información y yo necesito solamente los datos. 
-    const { data: session } = useSession();
 
     async function logout() {
         await signOut({
@@ -64,20 +65,30 @@ export default function AccountPage() {
         })
     }
     async function loginGoogle() {
-        await signIn('google',{callbackUrl: process.env.NEXT_PUBLIC_URL});
+        await signIn('google', { callbackUrl: process.env.NEXT_PUBLIC_URL });
     }
 
     async function loginGithub() {
-        await signIn('github', {callbackUrl: process.env.NEXT_PUBLIC_URL});
+        await signIn('github', { callbackUrl: process.env.NEXT_PUBLIC_URL });
     }
 
     async function login() {
         router.push('/api/auth/signin');
     }
 
-    async function saveAddress() {
-        const data = { name: session?.user?.name, email: session?.user?.email, city, streetAddress, city, postalCode, country }
-        await axios.put('/api/address', data)
+    // funcion to save or edit addres 
+    async function saveAddress(e) {
+        e.preventDefault();
+        setIsLoading(true);
+        try {
+            const data = { name, email, city, streetAddress, city, postalCode, country }
+            await axios.put('/api/address', data)
+        } catch (error) {
+            console.log(error)
+        }finally {
+            setIsLoading(false)
+          }
+
     }
 
     // si no tiene dependencias, entonces el useefect se ejecutara solo, sin necesidad de ningun cambio de estado 
@@ -88,6 +99,8 @@ export default function AccountPage() {
             setLoadingOrders(true)
         } else {
             axios.get('/api/address').then(response => {
+                setName(response.data.name);
+                setEmail(response.data.email);
                 setCity(response.data?.city);
                 setPostalCode(response.data?.postalCode);
                 setStreetAddress(response.data?.streetAddress);
@@ -171,48 +184,54 @@ export default function AccountPage() {
                     <div>
                         {session && (
                             <WhiteBox>
-                                <h2>Account details</h2>
-                                {!loadingAccData &&
+                                <h2>{session ? 'Account details' : 'Login'}</h2>
+                                {!loadingAccData && (
                                     <Spinner />
-                                }
-                                {loadingAccData && (
-                                    <>
+                                )}
+                                {loadingAccData && session && (
+                                    <form onSubmit={saveAddress}>
                                         <Input type="text"
                                             placeholder="Name"
-                                            value={session?.user?.name}
+                                            value={name}
                                             name="name"
+                                            required
                                             onChange={ev => setName(ev.target.value)} />
                                         <Input type="email"
                                             placeholder="Email"
-                                            value={session?.user?.email}
+                                            value={email}
                                             name="email"
+                                            required
                                             onChange={ev => setEmail(ev.target.value)} />
                                         <CityHolder>
                                             <Input type="text"
                                                 placeholder="City"
                                                 value={city}
                                                 name="city"
+                                                required
                                                 onChange={ev => setCity(ev.target.value)} />
                                             <Input type="text"
                                                 placeholder="Postal Code"
                                                 value={postalCode}
                                                 name="postalCode"
+                                                required
                                                 onChange={ev => setPostalCode(ev.target.value)} />
                                         </CityHolder>
                                         <Input type="text"
                                             placeholder="Street Address"
                                             value={streetAddress}
                                             name="streetAddress"
+                                            required
                                             onChange={ev => setStreetAddress(ev.target.value)} />
                                         <Input type="text"
                                             placeholder="Country"
                                             value={country}
                                             name="country"
+                                            required
                                             onChange={ev => setCountry(ev.target.value)} />
-                                        <Button $payment onClick={saveAddress}  >
-                                            Save
+                                        <Button $payment type="submit" disabled={isLoading}>
+                                            {isLoading ? 'Saving...' : 'Save data'}
                                         </Button>
-                                    </>
+                                    </form>
                                 )}
                                 <hr />
 
