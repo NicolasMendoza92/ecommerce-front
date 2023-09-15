@@ -177,14 +177,20 @@ export default function CartPage() {
   async function onSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
+
     try {
       const response = await axios.post('/api/checkout', {
-        name,email,city,postalCode,streetAddress,country,
-        cartProducts,total,
+        name, email, city, postalCode, streetAddress, country,
+        cartProducts, total,
       });
+
       // si me responde con la direccion, voy directamente a esa pantalla de pago de stripe para ejecutar el pago.
       if (response.data.url) {
         window.location = response.data.url;
+        await axios.post('/api/email', {
+          name, email, city, postalCode, streetAddress, country,
+          cartProducts, total,
+        })
       }
     } catch (error) {
       console.error(error)
@@ -193,7 +199,6 @@ export default function CartPage() {
     }
 
   }
-
 
   if (isSuccess) {
     return (
