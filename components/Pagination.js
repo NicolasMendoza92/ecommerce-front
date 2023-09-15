@@ -15,7 +15,7 @@ display: flex;
 justify-content: center;
 margin-bottom: 10px;
 `
-export const PaginationStore = ({ totalPages, setPageNumber, pageNumber }) => {
+export const Pagination = ({ totalPages, setPageNumber, pageNumber }) => {
 
     const pages = new Array(totalPages).fill(null).map((v, i) => i);
 
@@ -28,30 +28,42 @@ export const PaginationStore = ({ totalPages, setPageNumber, pageNumber }) => {
     };
 
     return (
-        <div>
-
-
+        <div >
             <PaginationWrapper>
                 {pageNumber === 1 && (
-                    <Button $block>
-                       <PrevPage/>
-                    </Button>
+                    <>
+                        <Button $disable><PrevPage /></Button>
+                        {pages.map((pageIndex) => (
+                            <Button $pagination key={pageIndex} onClick={() => setPageNumber(pageIndex + 1)}>
+                                {pageIndex + 1}
+                            </Button>
+                        ))}
+                        <Button $block onClick={gotoNext}><NextPage /></Button >
+                    </>
                 )}
-                {pageNumber > 1 && (
-                    <Button $block
-                        onClick={gotoPrevious}>
-                        <PrevPage/>
-                    </Button>
-                )
-                }
-                {pages.map((pageIndex) => (
-                    <Button $pagination key={pageIndex} onClick={() => setPageNumber(pageIndex + 1)}>
-                        {pageIndex + 1}
-                    </Button>
-                ))}
-                <Button $block onClick={gotoNext}>
-                    <NextPage/>
-                </Button >
+                {pageNumber > 1 && pageNumber != totalPages &&(
+                    <>
+                        <Button $block onClick={gotoPrevious}><PrevPage /></Button>
+                        {pages.map((pageIndex) => (
+                            <Button $pagination key={pageIndex} onClick={() => setPageNumber(pageIndex + 1)}>
+                                {pageIndex + 1}
+                            </Button>
+                        ))}
+                        <Button $block onClick={gotoNext}><NextPage /></Button >
+                    </>
+                )}
+                {pageNumber === totalPages && (
+                    <>
+                        <Button $block onClick={gotoPrevious}><PrevPage /></Button>
+                        {pages.map((pageIndex) => (
+                            <Button $pagination key={pageIndex} onClick={() => setPageNumber(pageIndex + 1)}>
+                                {pageIndex + 1}
+                            </Button>
+                        ))}
+                        <Button $disable><NextPage /></Button >
+                    </>
+                )}
+
             </PaginationWrapper>
             <PageIndicator>Page {pageNumber} of {totalPages}</PageIndicator>
         </div>

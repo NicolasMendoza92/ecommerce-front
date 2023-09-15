@@ -8,7 +8,7 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { WishedProduct } from "@/models/WishedProduct";
 import { useEffect, useState } from "react";
-import { PaginationStore } from "@/components/Pagination";
+import { Pagination } from "@/components/Pagination";
 
 // buscamos en nuestro servidor los productos y los traemos con find, como si fuera un axios get 
 export async function getServerSideProps(context) {
@@ -56,7 +56,7 @@ export default function ProductsPage({ products, wishedProducts }) {
       <Center>
         <Title>All products</Title>
         <ProductsGrid products={currentProducts} wishedProducts={wishedProducts} />
-        <PaginationStore
+        <Pagination
           pageNumber={pageNumber}
           setPageNumber={setPageNumber}
           totalPages={totalPages}

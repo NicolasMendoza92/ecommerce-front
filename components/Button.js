@@ -33,8 +33,8 @@ export const ButtonStyle = css`
   border:1px solid #fff;
 `}
   ${props => props.$block && css`
-    display: block;
-    background-color: grey;
+  display: block;
+  background-color: grey;
   color: #fff;
   border:"none";
   padding: 5px;
@@ -45,6 +45,17 @@ export const ButtonStyle = css`
   &:hover{
     background-color: white;
   color: grey;
+  }
+  `}
+  ${props => props.$disable && css`
+  display:block;
+  background-color: #D3D3D3;
+  color: #fff;
+  border:"none";
+  padding: 5px;
+  svg{
+    height: 20px;
+    margin:auto;
   }
   `}
   ${props => props.size === 'lg' && css`

@@ -11,6 +11,7 @@ const StyledHeader = styled.header`
 background-color:  #222;
 position: sticky;
 top:0;
+z-index: 3;
 `;
 
 const Logo = styled(Link)`
@@ -48,23 +49,24 @@ ${props => props.$mobileNavActive ? `
 
 const NavLink = styled(Link)`
   display: block;
-  color:#aaa;
+  color: ${(props) => (props.href === props.pathname ? "#fff" : "#aaa")};
   text-decoration:none;
   padding: 10px 0;
   @media screen and (min-width: 768px) {
     padding:0;
   }
-
+  
 `;
 
 const SearchLink = styled(Link)`
   position: relative;
   color:#aaa;
   text-decoration:none;
-  padding: 10px 0;
+  padding: 10px ;
   @media screen and (min-width: 768px) {
     padding:0;
   }
+
 `;
 
 const NavButton = styled.button`
@@ -89,8 +91,8 @@ a{
   min-width: 20px;
   color:white;
   svg{
-    width: 14px;
-    height: 14px;
+    width: 20px;
+    height: 20px;
   }
 }
 
@@ -101,10 +103,13 @@ export default function Header() {
 
   // uso UseContext para traer datos generales de toda la app y los guardo en vbles que creo
   const { cartProducts } = useContext(CartContext);
-   // way to create router in nextjs 
+   
+  // way to create router in nextjs 
    const router = useRouter();
-   const { pathname } = router;
-
+   const [pathName, setPathName] = useState(router.pathname);
+   const newPathName = () => {
+    setPathName(router.pathname);
+  };
 
   const [mobileNavActive, setMobileNavActive] = useState(false);
 
@@ -116,11 +121,11 @@ export default function Header() {
           <Logo href={'/'}>My Store</Logo>
           {/* seteamos estados, y le ponemos propiedad de estilo, cuando mobileNavActive es true (aprieto boton hamburguesa), entonces se activa la prop css */}
           <StyledNav $mobileNavActive={mobileNavActive}>
-            <NavLink href={'/'}>Home</NavLink>
-            <NavLink href={'/products'}>All products</NavLink>
-            <NavLink href={'/categories'}>Categories</NavLink>
-            <NavLink href={'/account'}>Account</NavLink>
-            <NavLink href={'/cart'}>Cart ({cartProducts.length})</NavLink>
+            <NavLink href={'/'} onClick={newPathName} pathname={pathName}>Home</NavLink>
+            <NavLink href={'/products'} onClick={newPathName} pathname={pathName} >All products</NavLink>
+            <NavLink href={'/categories'}  onClick={newPathName} pathname={pathName}>Categories</NavLink>
+            <NavLink href={'/account'}  onClick={newPathName} pathname={pathName}>Account</NavLink>
+            <NavLink href={'/cart'}  onClick={newPathName} pathname={pathName}>Cart ({cartProducts.length})</NavLink>
           </StyledNav>
           <SideIcons>
             <SearchLink href={'/search'}><SearchIcon /></SearchLink>
