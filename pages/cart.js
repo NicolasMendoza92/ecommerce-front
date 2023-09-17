@@ -94,7 +94,7 @@ export default function CartPage() {
 
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (cartProducts.length > 0) {
@@ -106,6 +106,7 @@ export default function CartPage() {
       setProducts([]);
     }
   }, [cartProducts]);
+
 
   // activa la pagina de pago exitoso, cuando se setea issucces y tambien limpia el carrito, que traigo el clearCart de CartContext
   useEffect(() => {
@@ -119,7 +120,8 @@ export default function CartPage() {
     axios.get('/api/settings?name=shippingFee').then(res => {
       setShippingFee(res.data.value)
     })
-  }, [clearCart]);
+  }, []);
+
 
   useEffect(() => {
     if (!session) {
@@ -177,25 +179,24 @@ export default function CartPage() {
   async function onSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
-
     try {
       const response = await axios.post('/api/checkout', {
         name, email, city, postalCode, streetAddress, country,
         cartProducts, total,
       });
-
+      await axios.post('/api/email', {
+        name, email, city, postalCode, streetAddress, country,
+        cartProducts, total,
+      })
       // si me responde con la direccion, voy directamente a esa pantalla de pago de stripe para ejecutar el pago.
       if (response.data.url) {
         window.location = response.data.url;
-        await axios.post('/api/email', {
-          name, email, city, postalCode, streetAddress, country,
-          cartProducts, total,
-        })
+
       }
     } catch (error) {
       console.error(error)
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
 
   }
