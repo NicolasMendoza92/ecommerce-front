@@ -73,10 +73,15 @@ export default function CartContextProvider({ children }) {
     localStorage.removeItem('cart');
   }
 
+  // vaciamos el emailData,
+  function clearEmailData() {
+    localStorage.removeItem('emaildata');
+  }
+
 
   return (
     // como no es un unico valor, lo poenmos como objeto entre {} y le voy pasando lo que quiero que sea proveedor para toda la app
-    <CartContext.Provider value={{ cartProducts, setCartProducts, addProductToCart, removeProductToCart, clearCart, addFeaturedToCart }}>
+    <CartContext.Provider value={{ cartProducts, setCartProducts, addProductToCart, removeProductToCart, clearCart, addFeaturedToCart, clearEmailData}}>
       {children}
     </CartContext.Provider>
   )

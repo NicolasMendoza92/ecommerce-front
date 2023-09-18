@@ -1,12 +1,12 @@
 
 import { getFromLocalStorage } from "@/utils/localStorage";
-import { Document, Page, View, Text, Image, PDFViewer, Font } from "@react-pdf/renderer";
+import { Document, Page, View, Text, PDFViewer, Font } from "@react-pdf/renderer";
 import { useState, useEffect } from "react";
 
 Font.register({ family: "Inter" })
 const emailDataPDF = getFromLocalStorage('emaildata') || {};
 
-const PDF = () => {
+const DocuPDF = () => {
     return (
         <Document>
             <Page size="A4"
@@ -37,7 +37,7 @@ const PDFView = () => {
 
     return (
         <PDFViewer style={{ width: "100%", height: "90vh" }}>
-            <PDF />
+            <DocuPDF />
         </PDFViewer>
     )
 }

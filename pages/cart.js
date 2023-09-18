@@ -92,7 +92,7 @@ export default function CartPage() {
   const router = useRouter()
 
   const { data: session } = useSession();
-  const { cartProducts, addProductToCart, removeProductToCart, clearCart, setCartProducts } = useContext(CartContext);
+  const { cartProducts, addProductToCart, removeProductToCart, clearCart, setCartProducts, clearEmailData } = useContext(CartContext);
 
   const [products, setProducts] = useState([]);
   // capturamos todos los input del payform, y los gestionamos como states.
@@ -230,7 +230,7 @@ export default function CartPage() {
     } catch (error) {
       console.log(error)
     } finally {
-      localStorage.removeItem('emaildata');
+      clearEmailData();
     }
   }
 
@@ -270,8 +270,7 @@ export default function CartPage() {
   }
 
   const goHome = async () => {
-
-    localStorage.removeItem('emaildata');
+    clearEmailData();
     await router.push('/')
   }
 
