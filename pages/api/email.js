@@ -4,6 +4,7 @@ import { Product } from "@/models/Product";
 
 export default async function handler(req, res) {
     await mongooseConnect();
+
     const { name, email, city, postalCode, streetAddress, country, total, cartProducts } = req.body;
 
     const productsIds = cartProducts;

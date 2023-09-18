@@ -10,6 +10,9 @@ import Input from "@/components/Input";
 import Trash from "@/components/icons/Trash";
 import { useSession } from "next-auth/react";
 import Swal from "sweetalert2";
+import { getFromLocalStorage, saveInLocalStorage } from "@/utils/localStorage";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 
 const ColumnsWrapper = styled.div`
@@ -23,6 +26,8 @@ const ColumnsWrapper = styled.div`
 `;
 
 const Box = styled.div`
+display: flex;
+flex-direction: column;
   background-color: #fff;
   border-radius: 10px;
   padding: 30px;
@@ -76,8 +81,16 @@ const CityHolder = styled.div`
   gap: 5px;
 `;
 
+const LinkHome = styled(Link)`
+text-decoration: none;
+
+`
+
+
 
 export default function CartPage() {
+
+  const router = useRouter()
 
   const { data: session } = useSession();
   const { cartProducts, addProductToCart, removeProductToCart, clearCart, setCartProducts } = useContext(CartContext);
@@ -179,15 +192,25 @@ export default function CartPage() {
   async function onSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
+    const emailInfo = {
+      name: name,
+      email: email,
+      city: city,
+      postal: postalCode,
+      streetAddress: streetAddress,
+      country: country,
+      cartProducts: cartProducts,
+      total: total,
+    }
+
     try {
+      saveInLocalStorage({ key: 'emaildata', value: emailInfo });
+
       const response = await axios.post('/api/checkout', {
         name, email, city, postalCode, streetAddress, country,
         cartProducts, total,
       });
-      await axios.post('/api/email', {
-        name, email, city, postalCode, streetAddress, country,
-        cartProducts, total,
-      })
+
       // si me responde con la direccion, voy directamente a esa pantalla de pago de stripe para ejecutar el pago.
       if (response.data.url) {
         window.location = response.data.url;
@@ -201,7 +224,51 @@ export default function CartPage() {
 
   }
 
+  const emailSender = async () => {
+    const emailData = getFromLocalStorage('emaildata') || {};
+    try {
+      await axios.post('api/email', emailData);
+    } catch (error) {
+      console.log(error)
+    } finally {
+      localStorage.removeItem('emaildata');
+    }
+  }
+
+  const emailConfirmationModal = () => {
+    const emailData = getFromLocalStorage('emaildata') || {};
+    if(emailData == {}){
+      alert('The email has already sent.')
+    }else {
+      try{
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You'll receive the confrimation email soon'",
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, send it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            emailSender();
+            Swal.fire(
+              'Great!',
+              'Check your mailbox.',
+              'success'
+            );
+            router.push('/')
+          }
+        })
+      }catch(error){
+        console.log(error)
+      }
+    }
+    
+    
+  }
+
   if (isSuccess) {
+
     return (
       <>
         <Header />
@@ -209,7 +276,10 @@ export default function CartPage() {
           <ColumnsWrapper>
             <Box>
               <h1>Thanks for your order!</h1>
-              <p>We will email you when your order will be sent.</p>
+              <p>What do you want to do with your receipt?</p>
+              <Button $primary onClick={emailConfirmationModal}>Send me an email.</Button>
+              <Button $primary >Download the PDF.</Button>
+              <LinkHome href={'/'}>Go to the home </LinkHome>
             </Box>
           </ColumnsWrapper>
         </Center>
@@ -337,7 +407,6 @@ export default function CartPage() {
               </form>
             </Box>
           )}
-
         </ColumnsWrapper>
       </Center>
     </>
