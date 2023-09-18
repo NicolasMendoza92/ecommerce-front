@@ -90,7 +90,7 @@ export default function Featured({ product }) {
   return (
     <Bg>
       <Center>
-        <ColumnsWrapper data-aos="fade-up">
+        <ColumnsWrapper data-aos="zoom-in">
           <Column>
             <div>
               <Title>{product.title}</Title>

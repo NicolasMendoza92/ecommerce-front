@@ -113,7 +113,7 @@ export default function ProductBox({ _id, title, price, images, wishedProducts }
   }
 
   return (
-    <CardBox data-aos="fade-up">
+    <CardBox data-aos="zoom-in">
       <WhiteLinkBox href={url}>
         <img src={images?.[0]} alt="" />
       </WhiteLinkBox>

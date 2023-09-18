@@ -21,7 +21,7 @@ export default function App({ Component, pageProps:{session,...pageProps} }) {
 
     useEffect(() => {
         AOS.init({
-             duration: 900,
+             duration: 600,
              once: false,
            })
      }, [])

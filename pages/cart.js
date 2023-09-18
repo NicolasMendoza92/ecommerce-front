@@ -11,8 +11,8 @@ import Trash from "@/components/icons/Trash";
 import { useSession } from "next-auth/react";
 import Swal from "sweetalert2";
 import { getFromLocalStorage, saveInLocalStorage } from "@/utils/localStorage";
-import Link from "next/link";
 import { useRouter } from "next/router";
+
 
 
 const ColumnsWrapper = styled.div`
@@ -81,12 +81,11 @@ const CityHolder = styled.div`
   gap: 5px;
 `;
 
-const LinkHome = styled(Link)`
-text-decoration: none;
-
+const ButtonPDFsWrapper = styled.div`
+display: flex;
+justify-content: space-between;
+gap:5px;
 `
-
-
 
 export default function CartPage() {
 
@@ -237,10 +236,10 @@ export default function CartPage() {
 
   const emailConfirmationModal = () => {
     const emailData = getFromLocalStorage('emaildata') || {};
-    if(emailData == {}){
+    if (emailData == {}) {
       alert('The email has already sent.')
-    }else {
-      try{
+    } else {
+      try {
         Swal.fire({
           title: 'Are you sure?',
           text: "You'll receive the confrimation email soon'",
@@ -259,12 +258,21 @@ export default function CartPage() {
             router.push('/')
           }
         })
-      }catch(error){
+      } catch (error) {
         console.log(error)
       }
     }
-    
-    
+
+  }
+
+  const goToPDF = () => {
+    router.push('/pdfvieworder')
+  }
+
+  const goHome = async () => {
+
+    localStorage.removeItem('emaildata');
+    await router.push('/')
   }
 
   if (isSuccess) {
@@ -278,8 +286,8 @@ export default function CartPage() {
               <h1>Thanks for your order!</h1>
               <p>What do you want to do with your receipt?</p>
               <Button $primary onClick={emailConfirmationModal}>Send me an email.</Button>
-              <Button $primary >Download the PDF.</Button>
-              <LinkHome href={'/'}>Go to the home </LinkHome>
+              <Button $primary onClick={goToPDF} >View PDF</Button>
+              <Button $addless onClick={goHome} >Go to Home page.</Button>
             </Box>
           </ColumnsWrapper>
         </Center>
