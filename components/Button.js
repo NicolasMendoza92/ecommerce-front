@@ -112,6 +112,7 @@ export const ButtonStyle = css`
   color:#fff;
   border:"none";
   width: 100%;
+  margin-top: 5px;
 `}
  ${props => props.$loginout && css`
   background-color: black;

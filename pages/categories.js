@@ -52,7 +52,7 @@ export default function CategoriesPage({ mainCategories, categoriesProducts, wis
             <Header />
             <Center>
                 {mainCategories.map(cat => (
-                    <CategoryWrapper data-aos="zoom-in" key={cat._id}>
+                    <CategoryWrapper key={cat._id}>
                         <CategoriesHead>
                             <h2>{cat.name} </h2>
                             <div>

@@ -2,7 +2,6 @@
 import Button from '@/components/Button'
 import Input from '@/components/Input'
 import WhiteBox from '@/components/WhiteBox'
-import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -24,10 +23,21 @@ a{
 
 }
 `
+const ErrorDiv = styled.div`
+background-color: red;
+border-radius: 1rem;
+color: white;
+padding:1rem;
+margin-top: 10px;
+`
+
+
 export default function RegisterPage() {
 
     const router = useRouter();
-    const [input, setInput] = useState({ name: '', email: '', password: '' });
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState("");
 
     const handleChange = (e) => {
         const { value, name } = e.target;
@@ -41,25 +51,38 @@ export default function RegisterPage() {
         }
     };
 
+    // handle errors 
+    const [error, setError] = useState("");
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        alert('not working')
-        // try {
-        //     await axios.post('/api/auth/register', input);
-        //     alert('usuario creado')
-        //     router.push('/login')
-        // } catch (error) {
-        //     console.error(error);
-        //     if (input.name === '' && input.email === '' && input.password === '') {
-        //         alert("Faltan datos")
-        //     }
-        //     else {
-        //         alert(JSON.stringify(error.response.data));
-        //     }
 
-        // }
+        if (!name || !email || !password) {
+            setError('Complete the fields');
+            return;
+        }
+        try {
+            const response = await fetch('api/auth/register', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name, email, password
+                })
+            })
 
-    };
+            if (response.ok) {
+                const form = e.target;
+                router.push("/login")
+                form.reset();
+            } else {
+                console.log('Register falied')
+            }
+        } catch (error) {
+            console.log('Error', error)
+        }
+    }
 
     return (
         <LoginBoxWrapper>
@@ -67,25 +90,33 @@ export default function RegisterPage() {
                 <h1>Welcome to My Store</h1>
                 <p>Create an account and enjoy it!</p>
                 <form onSubmit={handleSubmit}>
-                    <Input type="name"
+                    <Input
+                        type="text"
                         placeholder="Full Name"
-                        name="name"
-                        onChange={(e) => handleChange(e)}
-                        required />
-                    <Input type="email"
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <Input
+                        type="email"
                         placeholder="Email"
-                        name="email"
-                        onChange={(e) => handleChange(e)}
-                        required />
-                    <Input type="password"
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <Input
+                        onChange={(e) => setPassword(e.target.value)}
+                        type="password"
                         placeholder="Password"
-                        name="password"
-                        onChange={(e) => handleChange(e)}
-                        required/>
+                    />
                     <Button type='submit' $payment >Register</Button>
+                    {error && (
+                        <ErrorDiv>
+                            {error}
+                        </ErrorDiv >
+                    )}
                 </form>
                 <RegisterWrapper>
                     <Link href={'/'}>Continue without account</Link>
+                </RegisterWrapper>
+                <RegisterWrapper>
+                Already have an account? <Link href={'/login'}> Login </Link>
                 </RegisterWrapper>
             </WhiteBox>
         </LoginBoxWrapper>

@@ -1,6 +1,7 @@
 import CartContextProvider from "@/components/CartContext";
 import { createGlobalStyle } from "styled-components";
 import { SessionProvider } from "next-auth/react";
+import Head from 'next/head';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useEffect } from "react";
@@ -28,6 +29,9 @@ export default function App({ Component, pageProps:{session,...pageProps} }) {
 
     return (
         <>
+        <Head>
+              <title>E-commerce App</title>
+          </Head>
             <GlobalStyles />
             <SessionProvider session={session}>
             <CartContextProvider>

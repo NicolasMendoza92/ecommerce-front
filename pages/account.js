@@ -41,6 +41,7 @@ a{
 export default function AccountPage() {
     //  Si yo solamente pongo session en vez de data:session me aparece mas información y yo necesito solamente los datos. 
     const { data: session } = useSession();
+    console.log(session)
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -64,16 +65,8 @@ export default function AccountPage() {
             callbackUrl: process.env.NEXT_PUBLIC_URL,
         })
     }
-    async function loginGoogle() {
-        await signIn('google', { callbackUrl: process.env.NEXT_PUBLIC_URL });
-    }
-
-    async function loginGithub() {
-        await signIn('github', { callbackUrl: process.env.NEXT_PUBLIC_URL });
-    }
-
     async function login() {
-        router.push('/api/auth/signin');
+        router.push('/login');
     }
 
     // funcion to save or edit addres 
@@ -99,8 +92,8 @@ export default function AccountPage() {
             setLoadingOrders(true)
         } else {
             axios.get('/api/address').then(response => {
-                setName(response.data.name);
-                setEmail(response.data.email);
+                setName(response.data?.name);
+                setEmail(response.data?.email);
                 setCity(response.data?.city);
                 setPostalCode(response.data?.postalCode);
                 setStreetAddress(response.data?.streetAddress);
@@ -184,6 +177,7 @@ export default function AccountPage() {
                     <div>
                         {session && (
                             <WhiteBox>
+                                <p>Logged as {session.user?.email}</p>
                                 <h2>{session ? 'Account details' : 'Login'}</h2>
                                 {!loadingAccData && (
                                     <Spinner />
@@ -244,9 +238,7 @@ export default function AccountPage() {
                         {!session && (
                             <WhiteBox>
                                 <h2>Account details</h2>
-                                <Button $loginout onClick={login}>Login</Button>
-                                {/* <Button $loginoutG onClick={loginGoogle}>Login with Google</Button>
-                                <Button $loginout onClick={loginGithub}>Login with GitHub</Button> */}
+                                <Button $loginout onClick={login}>Sing Up</Button>
                             </WhiteBox>
                         )}
 
