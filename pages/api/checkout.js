@@ -58,8 +58,8 @@ export default async function handler(req, res) {
         mode: 'payment',
         customer_email: email,
         // la public url puede cambiar dependiendo donde inicie el proyecto , si lo subo a vercel la cambio 
-        success_url: process.env.PUBLIC_URL + '/cart?success=1',
-        cancel_url: process.env.PUBLIC_URL + '/cart?canceled=1',
+        success_url: 'https://ecommerce-front-rust.vercel.app/cart?success=1',
+        cancel_url: 'https://ecommerce-front-rust.vercel.app/cart?canceled=1',
         metadata: { orderId: orderDoc._id.toString(), test: 'ok' }, 
         shipping_options: [
             {

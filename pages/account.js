@@ -41,7 +41,6 @@ a{
 export default function AccountPage() {
     //  Si yo solamente pongo session en vez de data:session me aparece mas información y yo necesito solamente los datos. 
     const { data: session } = useSession();
-    console.log(session)
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');

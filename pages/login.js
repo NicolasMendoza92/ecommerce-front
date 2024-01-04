@@ -85,6 +85,7 @@ export default function LoginPage() {
                         </ErrorDiv >
                     )}
                 </form>
+                <span>To test login with: <b>user:</b> demo@gmail.com - <b>password:</b> 123456 </span>
                 <Button $loginoutG onClick={loginGoogle} >Login with google</Button>
                 <RegisterWrapper>
                     Don&apos;t have an account yet? <Link href={'/register'}>Sing up</Link>
