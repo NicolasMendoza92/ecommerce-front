@@ -10,6 +10,7 @@ import axios from "axios";
 import Spinner from "./Spinner";
 import { v4 } from "uuid";
 import StarsReviewed from "./StarsReviewed";
+import { useRouter } from "next/router";
 
 const Subtitle = styled.h3`
 font-size: 1rem;
@@ -51,6 +52,12 @@ p{
     margin: 0px;
 }
 `
+const ErrorDiv = styled.div`
+background-color: red;
+color: white;
+padding:5px;
+margin-top: 10px;
+`
 
 export default function ProductReviews({ product }) {
 
@@ -59,9 +66,17 @@ export default function ProductReviews({ product }) {
     const [stars, setStars] = useState(0);
     const [reviews, setReviews] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const[revLoading, setRevLoading] = useState(false);
+    const [revLoading, setRevLoading] = useState(false);
+    const router = useRouter()
+    // handle errors 
+    const [error, setError] = useState("");
 
     function submitReview() {
+       
+        if (!titleReview || !stars) {
+            setError('Complete the fields');
+            return;
+        }
         setRevLoading(true)
         const data = { titleReview, descriptionReview, stars, product: product._id };
         axios.post('/api/reviews', data).then(res => {
@@ -69,17 +84,18 @@ export default function ProductReviews({ product }) {
             setTitleReview('');
             setStars(0);
             getProductReviews();
+            router.reload()
         })
         setRevLoading(false);
     }
 
-const getProductReviews = async () => {
-    setIsLoading(true);
-    axios.get('/api/reviews?product=' + product._id).then(res => {
-        setReviews(res.data);
-        setIsLoading(false);
-    })
-}
+    const getProductReviews = async () => {
+        setIsLoading(true);
+        axios.get('/api/reviews?product=' + product._id).then(res => {
+            setReviews(res.data);
+            setIsLoading(false);
+        })
+    }
 
     useEffect(() => {
         getProductReviews();
@@ -102,15 +118,20 @@ const getProductReviews = async () => {
                         onChange={e => setDescriptionReview(e.target.value)} />
                     <div>
                         {revLoading && (
-                             <Button onClick={submitReview} $outline> <Spinner/></Button>
+                            <Button onClick={submitReview} $outline> <Spinner /></Button>
                         )}
                         <Button onClick={submitReview} $payment> Submit</Button>
                     </div>
+                    {error && (
+                        <ErrorDiv>
+                            {error}
+                        </ErrorDiv >
+                    )}
                 </WhiteBox>
                 <WhiteBox>
 
                     <Subtitle>All reviews</Subtitle>
-                    <hr/>
+                    <hr />
                     {isLoading && (
                         <Spinner />
                     )}
@@ -122,16 +143,16 @@ const getProductReviews = async () => {
                     {reviews.length > 0 && reviews.map(rev => (
                         <AllReviewsBox key={v4()}>
                             <StarAndDate >
-                                    <StarsReviewed defaultHowMany={rev.stars} />
-                                    <span>{(new Date(rev.createdAt)).toLocaleString(
-                                        "en-US",
-                                        {
-                                            month: "short",
-                                            day: "2-digit",
-                                            year: "numeric",
-                                        }
-                                    )}
-                                    </span>
+                                <StarsReviewed defaultHowMany={rev.stars} />
+                                <span>{(new Date(rev.createdAt)).toLocaleString(
+                                    "en-US",
+                                    {
+                                        month: "short",
+                                        day: "2-digit",
+                                        year: "numeric",
+                                    }
+                                )}
+                                </span>
                             </StarAndDate>
                             <ReviewGiven>
                                 <h3>{rev.titleReview}</h3>
