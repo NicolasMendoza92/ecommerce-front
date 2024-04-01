@@ -71,7 +71,7 @@ const SearchLink = styled(Link)`
 
 const NavButton = styled.button`
   background-color: transparent;
-  width: 30px;
+  width: 40px;
   height: 30px;
   border:0;
   color: white;
